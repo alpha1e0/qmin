@@ -1,0 +1,27 @@
+.pytest_cache/
+__pycache__/
+.vscode/
+tmp/
+
+dist/
+dist_electron/
+node_modules/
+build/
+
+.DS_Store/
+tmp/
+example/
+.claude/
+coverage/.tmp/
+
+*.db
+
+qmin.json
+todo.md
+
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+pnpm-debug.log*

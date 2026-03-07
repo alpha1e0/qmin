@@ -1,0 +1,48 @@
+import { ipcMain } from 'electron';
+import { IPC_CHANNELS } from '../channels';
+import { config } from '../../common/context';
+import { VERSION } from '../../common/constants';
+import { createLogger } from '../../utils/logger';
+
+const logger = createLogger('IPC:Common');
+
+/**
+ * Register common IPC handlers
+ */
+export function registerCommonHandlers(): void {
+  // Get application version
+  ipcMain.handle(IPC_CHANNELS.GET_VERSION, async () => {
+    logger.debug('Get application version');
+    return VERSION;
+  });
+
+  // Get current config
+  ipcMain.handle(IPC_CHANNELS.GET_CONFIG, async () => {
+    logger.debug('Get current config');
+    return {
+      mdEditor: {
+        debug: config.mdEditor.debug,
+      },
+      imgViewer: {
+        ivPath: config.imgViewer.ivPath,
+      },
+    };
+  });
+
+  // Read config from file
+  ipcMain.handle(IPC_CHANNELS.READ_CONFIG, async () => {
+    logger.debug('Read config from file');
+    const fs = await import('fs/promises');
+    const configPath = require('path').join(process.cwd(), 'qmin.json');
+
+    try {
+      const data = await fs.readFile(configPath, 'utf-8');
+      logger.info('Config file read successfully');
+      return JSON.parse(data);
+    } catch (err) {
+      logger.error('Failed to read config file', err);
+      // Error will be handled by caller
+      throw new Error('Failed to read config file');
+    }
+  });
+}
