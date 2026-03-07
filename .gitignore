@@ -15,6 +15,7 @@ example/
 coverage/.tmp/
 
 *.db
+vue.config.js.web
 
 qmin.json
 todo.md
