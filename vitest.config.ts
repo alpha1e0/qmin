@@ -5,18 +5,19 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    setupFiles: ['./src/core/vitest.setup.ts'],
+    setupFiles: ['./src/main/core/vitest.setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['src/core/**/*.ts'],
+      include: ['src/main/core/**/*.ts'],
       exclude: [
         'node_modules/',
         'dist/',
+        'dist-electron/',
         '**/*.test.ts',
         '**/*.spec.ts',
         'src/renderer/',
-        'src/core/vitest.setup.ts'
+        'src/main/core/vitest.setup.ts'
       ],
       all: true,
       lines: 80,
@@ -24,12 +25,12 @@ export default defineConfig({
       branches: 80,
       statements: 80
     },
-    include: ['src/core/**/*.test.ts'],
-    exclude: ['node_modules/', 'dist/']
+    include: ['src/main/core/**/*.test.ts'],
+    exclude: ['node_modules/', 'dist/', 'dist-electron/']
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src/core')
+      '@': path.resolve(__dirname, './src/main')
     }
   }
 });

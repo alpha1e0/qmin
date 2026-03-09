@@ -1,5 +1,41 @@
 # Qmin 变更日志
 
+## [2.0.0] - 2026-03-10
+
+### Changed
+- **构建系统迁移** 🚀
+  - 从 vue-cli-plugin-electron-builder 迁移到 electron-vite
+  - 更快的开发服务器启动和热重载（Vite vs Webpack）
+  - 更好的 TypeScript 原生支持
+  - 更简洁的配置文件结构
+
+### Added
+- **新配置文件**
+  - electron.vite.config.ts (主构建配置)
+  - tsconfig.node.json (主进程/预加载 TypeScript 配置)
+  - tsconfig.web.json (渲染进程 TypeScript 配置)
+  - electron-builder.json5 (打包配置)
+
+### Changed
+- **目录结构调整**
+  - src/core → src/main/core (主进程代码)
+  - src/background.js → src/main/index.ts (主进程入口)
+  - src/preload.js → src/preload/index.ts (预加载脚本)
+  - src/components → src/renderer/src/components (渲染进程代码)
+
+### Removed
+- **旧配置文件**
+  - vue.config.js (不再需要)
+  - babel.config.js (Vite 不需要)
+
+### Technical
+- NPM scripts 更新:
+  - e-serve → dev (electron-vite dev)
+  - build → build (electron-vite build)
+  - e-build → build:win/mac/linux (平台特定打包)
+- 主进程入口: dist/background.js → dist-electron/main/index.js
+- 开发服务器: webpack-dev-server → Vite dev server
+
 ## [1.4.0] - 2026-03-07
 
 ### Added
