@@ -5,6 +5,8 @@ tmp/
 
 dist/
 dist_electron/
+dist-electron/
+out/
 node_modules/
 build/
 
