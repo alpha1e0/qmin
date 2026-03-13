@@ -1,0 +1,83 @@
+{
+  "$schema": "./test-config.schema.json",
+  "description": "Qmin 单元测试配置文件。此文件包含测试所需的模拟数据和配置。",
+  "version": "1.0.0",
+
+  "llm": {
+    "description": "LLM API 配置，用于 roleplay 和聊天功能测试",
+    "openai": {
+      "base_url": "https://api.example.com/v1",
+      "model": "gpt-4",
+      "key": "",
+      "temperature": 0.7,
+      "max_tokens": 1000,
+      "proxy": "",
+      "break_prompt": ""
+    },
+    "default": {
+      "base_url": "https://api.example.com/v1",
+      "model": "gpt-3.5-turbo",
+      "key": "",
+      "temperature": 0.7,
+      "max_tokens": 2000
+    }
+  },
+
+  "imageGen": {
+    "description": "图像生成 API 配置",
+    "flux": {
+      "base_url": "https://flux-api.example.com",
+      "model": "flux-pro",
+      "key": ""
+    },
+    "gemini": {
+      "base_url": "https://generativelanguage.googleapis.com",
+      "model": "gemini-2.0-flash-exp-image-generation",
+      "key": ""
+    },
+    "qwen": {
+      "description": "通义万相配置",
+      "base_url": "https://dashscope.aliyuncs.com",
+      "model": "wanx-v1",
+      "key": ""
+    }
+  },
+
+  "database": {
+    "description": "测试数据库配置",
+    "type": "memory",
+    "path": ":memory:"
+  },
+
+  "paths": {
+    "description": "测试环境路径配置",
+    "tempDirectory": "/tmp/qmin-test",
+    "logDirectory": "/tmp/qmin-test/logs",
+    "mdEditorDir": "/tmp/qmin-test/md_editor",
+    "mdEditorImgDir": "/tmp/qmin-test/md_editor/img",
+    "roleplayDir": "/tmp/qmin-test/roleplay",
+    "roleplayScenarioDir": "/tmp/qmin-test/roleplay/scenario",
+    "roleplayLlmConfigsDir": "/tmp/qmin-test/roleplay/llm_configs",
+    "imgGenDir": "/tmp/qmin-test/img_gen",
+    "imgGenLlmConfigsDir": "/tmp/qmin-test/img_gen/llm_configs",
+    "imgGenHistoryDir": "/tmp/qmin-test/img_gen/history"
+  },
+
+  "encryption": {
+    "description": "加密测试配置",
+    "enKey": "12345678901234567890123456789012",
+    "hkeyHash": "5d41402abc4b2a76b9719d911017c592"
+  },
+
+  "testSettings": {
+    "description": "测试运行设置",
+    "timeout": 30000,
+    "verboseLogging": false,
+    "coverageThreshold": {
+      "lines": 80,
+      "functions": 80,
+      "branches": 80,
+      "statements": 80
+    }
+  }
+}

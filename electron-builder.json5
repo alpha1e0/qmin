@@ -21,7 +21,7 @@ export default {
     artifactName: '${productName}-${version}.${ext}'
   },
   files: [
-    'dist/**/*',
+    'dist-electron/**/*',
     'package.json'
   ]
 }

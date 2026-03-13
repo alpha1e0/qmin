@@ -42,7 +42,6 @@
     "en_key": "your-encryption-key",  // 文档内容加密密钥
     "hkey_hash": "md5-hash",          // 隐藏space验证密码哈希
     "debug": true,                    // 调试模式
-    "iv_path": "dir_not_exists"       // 图片查看器工作目录
   }
 }
 ```

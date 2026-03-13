@@ -137,6 +137,26 @@ const api = {
   // Legacy API for backward compatibility
   getServerAddr: () => ipcRenderer.invoke('get-server-addr'),
   getTips: (arg1) => ipcRenderer.invoke('get-tips', arg1),
+
+  // Generic IPC event listeners
+  ipcRendererOn: (channel, callback) => {
+    const wrapper = (event, ...args) => callback(...args);
+    const key = `${channel}-${Date.now()}`;
+    listeners.set(key, {
+      channel,
+      callback: wrapper,
+    });
+    ipcRenderer.on(channel, wrapper);
+  },
+
+  ipcRendererOff: (channel, callback) => {
+    for (const [key, value] of listeners.entries()) {
+      if (value.channel === channel) {
+        ipcRenderer.removeListener(channel, value.callback);
+        listeners.delete(key);
+      }
+    }
+  },
 };
 
 /**

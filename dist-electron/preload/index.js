@@ -112,7 +112,25 @@ const api = {
   },
   // Legacy API for backward compatibility
   getServerAddr: () => electron.ipcRenderer.invoke("get-server-addr"),
-  getTips: (arg1) => electron.ipcRenderer.invoke("get-tips", arg1)
+  getTips: (arg1) => electron.ipcRenderer.invoke("get-tips", arg1),
+  // Generic IPC event listeners
+  ipcRendererOn: (channel, callback) => {
+    const wrapper = (event, ...args) => callback(...args);
+    const key = `${channel}-${Date.now()}`;
+    listeners.set(key, {
+      channel,
+      callback: wrapper
+    });
+    electron.ipcRenderer.on(channel, wrapper);
+  },
+  ipcRendererOff: (channel, callback) => {
+    for (const [key, value] of listeners.entries()) {
+      if (value.channel === channel) {
+        electron.ipcRenderer.removeListener(channel, value.callback);
+        listeners.delete(key);
+      }
+    }
+  }
 };
 electron.contextBridge.exposeInMainWorld("electron", api);
 electron.contextBridge.exposeInMainWorld("mdEditor", api.md);

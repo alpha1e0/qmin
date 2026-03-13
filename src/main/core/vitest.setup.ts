@@ -220,18 +220,18 @@ vi.mock('../common/context', () => ({
     imgGenDir: '/tmp/img_gen',
     imgGenLlmConfigsDir: '/tmp/img_gen/llm_configs',
     imgGenHistoryDir: '/tmp/img_gen/history',
-    configPath: '/tmp/cfg.json',
+    configPath: '/tmp/qmin.json',  // Changed from cfg.json to qmin.json
     tasks: '/tmp/tasks.json',
     currentDirectory: process.cwd(),
     userDirectory: '/tmp',
     workspace: '/tmp/.qmin',
     // Legacy property getters for backward compatibility
-    curDir: process.cwd(),
-    userDir: '/tmp',
-    logDir: '/tmp/log',
-    tmpDir: '/tmp/tmp',
-    cfg: '/tmp/cfg.json',
-    qminDb: ':memory:',
+    get curDir() { return process.cwd(); },
+    get userDir() { return '/tmp'; },
+    get logDir() { return '/tmp/log'; },
+    get tmpDir() { return '/tmp/tmp'; },
+    get cfg() { return '/tmp/qmin.json'; },  // Changed from cfg.json to qmin.json (deprecated alias)
+    get qminDb() { return ':memory:'; },
   },
   config: {
     mdEditor: {

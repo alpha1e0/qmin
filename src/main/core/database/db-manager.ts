@@ -1,9 +1,11 @@
 import Database from 'better-sqlite3';
-import * as fs from 'fs/promises';
+import * as fs from 'fs';
 import * as path from 'path';
 
 import { wpath } from '../common/context';
 import { BaseDBError } from '../common/exceptions';
+import { mix } from '../utils/crypto';
+import { currentTimeObjToStr } from '../utils/common';
 
 /**
  * Database Manager using better-sqlite3
@@ -115,17 +117,15 @@ export class DBManager {
   /**
    * Create database from SQL file if it doesn't exist
    */
-  private async createDbIfNotExists(): Promise<void> {
-    try {
-      await fs.access(this.dbPath);
+  private createDbIfNotExists(): void {
+    // Check if database already exists
+    if (fs.existsSync(this.dbPath)) {
       return; // Database exists
-    } catch {
-      // Database doesn't exist, create it
     }
 
     try {
       const sqlFile = wpath.getSqlFile();
-      const sqlScript = await fs.readFile(sqlFile, 'utf-8');
+      const sqlScript = fs.readFileSync(sqlFile, 'utf-8');
 
       // Create temporary database for initialization
       const tempDb = new Database(this.dbPath);
@@ -140,8 +140,6 @@ export class DBManager {
       }
 
       // Insert default category
-      const { mix } = await import('../utils/crypto');
-      const { currentTimeObjToStr } = await import('../utils/common');
       tempDb
         .prepare("INSERT INTO doc_category ('name', 'space', 'create_time') VALUES (?, ?, ?)")
         .run(mix('默认'), 0, currentTimeObjToStr());

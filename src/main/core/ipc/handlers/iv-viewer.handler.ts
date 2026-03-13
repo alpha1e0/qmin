@@ -2,10 +2,22 @@ import { ipcMain, webContents } from 'electron';
 import * as path from 'path';
 import { IPC_CHANNELS } from '../channels';
 import { IVViewerService } from '../../services/iv-viewer.service';
-import { IVDirectory } from '../../common/config';
 import { createLogger } from '../../utils/logger';
 
 const logger = createLogger('IVViewerHandler');
+
+// Lazy-loaded service instance
+let ivViewerService: IVViewerService | null = null;
+
+/**
+ * Get or create IVViewerService instance
+ */
+function getService(): IVViewerService {
+  if (!ivViewerService) {
+    ivViewerService = new IVViewerService();
+  }
+  return ivViewerService;
+}
 
 /**
  * Track ongoing indexing tasks for progress reporting
@@ -23,30 +35,28 @@ const indexingTasks: Map<string, IndexingTask> = new Map();
  * Register Image Viewer IPC handlers
  */
 export function registerIvViewerHandlers(): void {
-  const ivViewerService = new IVViewerService();
-
   // Get directory structure
   ipcMain.handle(IPC_CHANNELS.IV_GET_DIRECTORIES, async () => {
     logger.debug('Get directory structure');
-    return await ivViewerService.getDirStructure();
+    return await getService().getDirStructure();
   });
 
   // Refresh directory structure
   ipcMain.handle(IPC_CHANNELS.IV_REFRESH_DIRECTORIES, async () => {
     logger.info('Refresh directory structure');
-    return await ivViewerService.refreshDirStructure();
+    return await getService().refreshDirStructure();
   });
 
   // Get directories that need indexing
   ipcMain.handle(IPC_CHANNELS.IV_GET_DIRS_TO_INDEX, async () => {
     logger.debug('Get directories to index');
-    return await ivViewerService.getDirsToIndex();
+    return await getService().getDirsToIndex();
   });
 
   // Check if directory is indexed
   ipcMain.handle(IPC_CHANNELS.IV_HAS_INDEXING, async (event, pathId: string) => {
     logger.debug(`Check if directory indexed: ${pathId}`);
-    return await ivViewerService.hasIndexing(pathId);
+    return await getService().hasIndexing(pathId);
   });
 
   // Start indexing a directory
@@ -71,7 +81,7 @@ export function registerIvViewerHandlers(): void {
       });
 
       // Start background indexing
-      startIndexing(ivViewerService, taskId, pathId, allIndexing);
+      startIndexing(getService(), taskId, pathId, allIndexing);
 
       return { success: true };
     }
@@ -80,10 +90,10 @@ export function registerIvViewerHandlers(): void {
   // Get images from a directory
   ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGES, async (event, pathId: string, score: number = 0) => {
     logger.debug(`Get images from ${pathId} with score >= ${score}`);
-    const images = await ivViewerService.getImages(pathId, score);
+    const images = await getService().getImages(pathId, score);
 
     // Add thumbnail paths to each image
-    const idxCacheDir = path.join(ivViewerService.getCacheDir(pathId));
+    const idxCacheDir = path.join(getService().getCacheDir(pathId));
 
     return images.map((img) => ({
       ...img,
@@ -94,25 +104,25 @@ export function registerIvViewerHandlers(): void {
   // Get a single image
   ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGE, async (event, pathId: string) => {
     logger.debug(`Get image ${pathId}`);
-    return await ivViewerService.getImage(pathId);
+    return await getService().getImage(pathId);
   });
 
   // Get image info
   ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGE_INFO, async (event, pathId: string) => {
     logger.debug(`Get image info for ${pathId}`);
-    return await ivViewerService.getImageInfo(pathId);
+    return await getService().getImageInfo(pathId);
   });
 
   // Get directory metadata
   ipcMain.handle(IPC_CHANNELS.IV_GET_META, async (event, pathId: string) => {
     logger.debug(`Get metadata for ${pathId}`);
-    return await ivViewerService.getMeta(pathId);
+    return await getService().getMeta(pathId);
   });
 
   // Update image score
   ipcMain.handle(IPC_CHANNELS.IV_UPDATE_SCORE, async (event, pathId: string, score: number) => {
     logger.info(`Update score for ${pathId} to ${score}`);
-    await ivViewerService.updateScore(pathId, score);
+    await getService().updateScore(pathId, score);
     return { success: true };
   });
 
@@ -121,27 +131,27 @@ export function registerIvViewerHandlers(): void {
     IPC_CHANNELS.IV_CLASSIFY,
     async (event, pathId: string, classificationName: string) => {
       logger.info(`Classify ${pathId} as '${classificationName}'`);
-      return await ivViewerService.classify(pathId, classificationName);
+      return await getService().classify(pathId, classificationName);
     }
   );
 
   // Check if directory is classified
   ipcMain.handle(IPC_CHANNELS.IV_IS_CLASSIFIED, async (event, pathId: string) => {
     logger.debug(`Check if ${pathId} is classified`);
-    return await ivViewerService.isClassified(pathId);
+    return await getService().isClassified(pathId);
   });
 
   // Remove a directory
   ipcMain.handle(IPC_CHANNELS.IV_REMOVE_DIR, async (event, pathId: string) => {
     logger.info(`Remove directory ${pathId}`);
-    await ivViewerService.removeDir(pathId);
+    await getService().removeDir(pathId);
     return { success: true };
   });
 
   // Remove index (thumbnails)
   ipcMain.handle(IPC_CHANNELS.IV_REMOVE_INDEX, async (event, pathId: string) => {
     logger.info(`Remove index for ${pathId}`);
-    await ivViewerService.removeIndexDir(pathId);
+    await getService().removeIndexDir(pathId);
     return { success: true };
   });
 }

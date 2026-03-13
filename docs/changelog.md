@@ -1,5 +1,28 @@
 # Qmin 变更日志
 
+## [2.0.1] - 2026-03-12
+
+### Fixed
+- **配置文件统一** 🔧
+  - 统一配置文件名称为 `qmin.json`（消除 `cfg.json` 和 `qmin.json` 的混乱）
+  - 配置文件位置统一为 `{workspace}/qmin.json`
+  - 更新 `WPath.configPath` 从 `cfg.json` 改为 `qmin.json`
+  - 更新所有配置读取代码使用统一的 `wpath.configPath`
+
+### Changed
+- **代码修改**:
+  - `src/main/core/common/context.ts`: 配置路径从 `cfg.json` 改为 `qmin.json`
+  - `src/main/index.ts`: 使用 `wpath.configPath` 替代硬编码路径
+  - `src/main/core/background.ts`: 使用 `wpath.configPath` 替代硬编码路径
+  - `src/main/core/ipc/handlers/common.handler.ts`: 使用 `wpath.configPath`
+  - `src/main/core/vitest.setup.ts`: 更新测试 mock 配置
+  - `docs/specs/index.md`: 明确配置文件规范
+
+### Technical
+- 配置文件路径统一：所有代码现在使用 `wpath.configPath` 获取配置路径
+- 向后兼容：保留 `wpath.cfg` 作为 `configPath` 的 deprecated alias
+- 测试状态：324个测试通过，9个测试失败（与本次修改无关的已知问题）
+
 ## [2.0.0] - 2026-03-10
 
 ### Changed

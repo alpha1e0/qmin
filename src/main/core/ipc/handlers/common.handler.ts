@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import { IPC_CHANNELS } from '../channels';
-import { config } from '../../common/context';
+import { config, wpath } from '../../common/context';
 import { VERSION } from '../../common/constants';
 import { createLogger } from '../../utils/logger';
 
@@ -33,7 +33,8 @@ export function registerCommonHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.READ_CONFIG, async () => {
     logger.debug('Read config from file');
     const fs = await import('fs/promises');
-    const configPath = require('path').join(process.cwd(), 'qmin.json');
+    // Use unified config path from wpath: {workspace}/qmin.json
+    const configPath = wpath.configPath;
 
     try {
       const data = await fs.readFile(configPath, 'utf-8');

@@ -26,8 +26,9 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs/promises");
 const Database = require("better-sqlite3");
-const uuid = require("uuid");
-const crypto$1 = require("crypto");
+const fs$1 = require("fs");
+const crypto = require("crypto");
+require("uuid");
 const sharp = require("sharp");
 const OpenAI = require("openai");
 const axios = require("axios");
@@ -52,75 +53,10 @@ function _interopNamespaceDefault(e) {
 const path__namespace = /* @__PURE__ */ _interopNamespaceDefault(path);
 const os__namespace = /* @__PURE__ */ _interopNamespaceDefault(os);
 const fs__namespace = /* @__PURE__ */ _interopNamespaceDefault(fs);
-const crypto__namespace = /* @__PURE__ */ _interopNamespaceDefault(crypto$1);
+const fs__namespace$1 = /* @__PURE__ */ _interopNamespaceDefault(fs$1);
+const crypto__namespace = /* @__PURE__ */ _interopNamespaceDefault(crypto);
 const https__namespace = /* @__PURE__ */ _interopNamespaceDefault(https);
 const http__namespace = /* @__PURE__ */ _interopNamespaceDefault(http);
-const IPC_CHANNELS = {
-  // Common channels
-  GET_VERSION: "qmin:get-version",
-  GET_CONFIG: "qmin:get-config",
-  READ_CONFIG: "qmin:read-config",
-  // Markdown Editor channels
-  MD_GET_CATEGORY_LIST: "qmin:md:get-category-list",
-  MD_GET_CATEGORY_BY_ID: "qmin:md:get-category-by-id",
-  MD_CREATE_CATEGORY: "qmin:md:create-category",
-  MD_UPDATE_CATEGORY: "qmin:md:update-category",
-  MD_DELETE_CATEGORY: "qmin:md:delete-category",
-  MD_GET_DOC_LIST: "qmin:md:get-doc-list",
-  MD_GET_DOC_BY_ID: "qmin:md:get-doc-by-id",
-  MD_CREATE_DOC: "qmin:md:create-doc",
-  MD_UPDATE_DOC: "qmin:md:update-doc",
-  MD_DELETE_DOC: "qmin:md:delete-doc",
-  MD_SAVE_IMAGE: "qmin:md:save-image",
-  MD_GET_IMAGE: "qmin:md:get-image",
-  MD_VERIFY_HKEY: "qmin:md:verify-hkey",
-  // Image Viewer channels
-  IV_GET_DIRECTORIES: "qmin:iv:get-directories",
-  IV_REFRESH_DIRECTORIES: "qmin:iv:refresh-directories",
-  IV_GET_DIRS_TO_INDEX: "qmin:iv:get-dirs-to-index",
-  IV_HAS_INDEXING: "qmin:iv:has-indexing",
-  IV_START_INDEX: "qmin:iv:start-index",
-  IV_GET_IMAGES: "qmin:iv:get-images",
-  IV_GET_IMAGE: "qmin:iv:get-image",
-  IV_GET_IMAGE_INFO: "qmin:iv:get-image-info",
-  IV_GET_META: "qmin:iv:get-meta",
-  IV_UPDATE_SCORE: "qmin:iv:update-score",
-  IV_CLASSIFY: "qmin:iv:classify",
-  IV_IS_CLASSIFIED: "qmin:iv:is-classified",
-  IV_REMOVE_DIR: "qmin:iv:remove-dir",
-  IV_REMOVE_INDEX: "qmin:iv:remove-index",
-  // Indexing progress events (one-way communication from main to renderer)
-  IV_INDEX_PROGRESS: "qmin:iv:index-progress",
-  IV_ALL_INDEX_PROGRESS: "qmin:iv:all-index-progress",
-  // Task Manager channels
-  TM_GET_ALL_TASKS: "qmin:tm:get-all-tasks",
-  TM_GET_TASK: "qmin:tm:get-task",
-  TM_CREATE_TASK: "qmin:tm:create-task",
-  TM_REMOVE_TASK: "qmin:tm:remove-task",
-  // Roleplay channels
-  RP_LIST_SCENARIOS: "qmin:rp:list-scenarios",
-  RP_GET_SCENARIO: "qmin:rp:get-scenario",
-  RP_CREATE_SCENARIO: "qmin:rp:create-scenario",
-  RP_UPDATE_SCENARIO: "qmin:rp:update-scenario",
-  RP_DELETE_SCENARIO: "qmin:rp:delete-scenario",
-  RP_LIST_HISTORIES: "qmin:rp:list-histories",
-  RP_GET_HISTORY: "qmin:rp:get-history",
-  RP_CREATE_HISTORY: "qmin:rp:create-history",
-  RP_SAVE_HISTORY: "qmin:rp:save-history",
-  RP_DELETE_HISTORY: "qmin:rp:delete-history",
-  RP_LIST_LLM_CONFIGS: "qmin:rp:list-llm-configs",
-  RP_GET_LLM_CONFIG: "qmin:rp:get-llm-config",
-  RP_SAVE_LLM_CONFIG: "qmin:rp:save-llm-config",
-  // Image Generation channels
-  IMG_GENERATE: "qmin:img:generate",
-  IMG_GENERATE_QWEN: "qmin:img:generate-qwen",
-  IMG_LIST_HISTORY: "qmin:img:list-history",
-  IMG_GET_HISTORY: "qmin:img:get-history",
-  IMG_DELETE_HISTORY: "qmin:img:delete-history",
-  IMG_LIST_LLM_CONFIGS: "qmin:img:list-llm-configs",
-  IMG_GET_LLM_CONFIG: "qmin:img:get-llm-config",
-  IMG_SAVE_LLM_CONFIG: "qmin:img:save-llm-config"
-};
 var LogLevel = /* @__PURE__ */ ((LogLevel2) => {
   LogLevel2[LogLevel2["DEBUG"] = 0] = "DEBUG";
   LogLevel2[LogLevel2["INFO"] = 1] = "INFO";
@@ -457,7 +393,7 @@ class WPath {
     this.ensureDirectory(this.imgGenLlmConfigsDir);
     this.imgGenHistoryDir = path__namespace.join(this.imgGenDir, "history");
     this.ensureDirectory(this.imgGenHistoryDir);
-    this.configPath = path__namespace.join(this.workspace, "cfg.json");
+    this.configPath = path__namespace.join(this.workspace, "qmin.json");
     this.qminDatabase = path__namespace.join(this.workspace, "qmin.db");
     this.tasks = path__namespace.join(this.workspace, "tasks.json");
   }
@@ -543,6 +479,72 @@ const context = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   config,
   wpath
 }, Symbol.toStringTag, { value: "Module" }));
+const IPC_CHANNELS = {
+  // Common channels
+  GET_VERSION: "qmin:get-version",
+  GET_CONFIG: "qmin:get-config",
+  READ_CONFIG: "qmin:read-config",
+  // Markdown Editor channels
+  MD_GET_CATEGORY_LIST: "qmin:md:get-category-list",
+  MD_GET_CATEGORY_BY_ID: "qmin:md:get-category-by-id",
+  MD_CREATE_CATEGORY: "qmin:md:create-category",
+  MD_UPDATE_CATEGORY: "qmin:md:update-category",
+  MD_DELETE_CATEGORY: "qmin:md:delete-category",
+  MD_GET_DOC_LIST: "qmin:md:get-doc-list",
+  MD_GET_DOC_BY_ID: "qmin:md:get-doc-by-id",
+  MD_CREATE_DOC: "qmin:md:create-doc",
+  MD_UPDATE_DOC: "qmin:md:update-doc",
+  MD_DELETE_DOC: "qmin:md:delete-doc",
+  MD_SAVE_IMAGE: "qmin:md:save-image",
+  MD_GET_IMAGE: "qmin:md:get-image",
+  MD_VERIFY_HKEY: "qmin:md:verify-hkey",
+  // Image Viewer channels
+  IV_GET_DIRECTORIES: "qmin:iv:get-directories",
+  IV_REFRESH_DIRECTORIES: "qmin:iv:refresh-directories",
+  IV_GET_DIRS_TO_INDEX: "qmin:iv:get-dirs-to-index",
+  IV_HAS_INDEXING: "qmin:iv:has-indexing",
+  IV_START_INDEX: "qmin:iv:start-index",
+  IV_GET_IMAGES: "qmin:iv:get-images",
+  IV_GET_IMAGE: "qmin:iv:get-image",
+  IV_GET_IMAGE_INFO: "qmin:iv:get-image-info",
+  IV_GET_META: "qmin:iv:get-meta",
+  IV_UPDATE_SCORE: "qmin:iv:update-score",
+  IV_CLASSIFY: "qmin:iv:classify",
+  IV_IS_CLASSIFIED: "qmin:iv:is-classified",
+  IV_REMOVE_DIR: "qmin:iv:remove-dir",
+  IV_REMOVE_INDEX: "qmin:iv:remove-index",
+  // Indexing progress events (one-way communication from main to renderer)
+  IV_INDEX_PROGRESS: "qmin:iv:index-progress",
+  IV_ALL_INDEX_PROGRESS: "qmin:iv:all-index-progress",
+  // Task Manager channels
+  TM_GET_ALL_TASKS: "qmin:tm:get-all-tasks",
+  TM_GET_TASK: "qmin:tm:get-task",
+  TM_CREATE_TASK: "qmin:tm:create-task",
+  TM_REMOVE_TASK: "qmin:tm:remove-task",
+  // Roleplay channels
+  RP_LIST_SCENARIOS: "qmin:rp:list-scenarios",
+  RP_GET_SCENARIO: "qmin:rp:get-scenario",
+  RP_CREATE_SCENARIO: "qmin:rp:create-scenario",
+  RP_UPDATE_SCENARIO: "qmin:rp:update-scenario",
+  RP_DELETE_SCENARIO: "qmin:rp:delete-scenario",
+  RP_LIST_HISTORIES: "qmin:rp:list-histories",
+  RP_GET_HISTORY: "qmin:rp:get-history",
+  RP_CREATE_HISTORY: "qmin:rp:create-history",
+  RP_SAVE_HISTORY: "qmin:rp:save-history",
+  RP_DELETE_HISTORY: "qmin:rp:delete-history",
+  RP_LIST_LLM_CONFIGS: "qmin:rp:list-llm-configs",
+  RP_GET_LLM_CONFIG: "qmin:rp:get-llm-config",
+  RP_SAVE_LLM_CONFIG: "qmin:rp:save-llm-config",
+  // Image Generation channels
+  IMG_GENERATE: "qmin:img:generate",
+  IMG_GENERATE_QWEN: "qmin:img:generate-qwen",
+  IMG_LIST_HISTORY: "qmin:img:list-history",
+  IMG_GET_HISTORY: "qmin:img:get-history",
+  IMG_DELETE_HISTORY: "qmin:img:delete-history",
+  IMG_LIST_LLM_CONFIGS: "qmin:img:list-llm-configs",
+  IMG_GET_LLM_CONFIG: "qmin:img:get-llm-config",
+  IMG_SAVE_LLM_CONFIG: "qmin:img:save-llm-config"
+};
 const VERSION = "1.0.0";
 const MIME_MAP = {
   ".jpg": "image/jpeg",
@@ -579,7 +581,7 @@ function registerCommonHandlers() {
   electron.ipcMain.handle(IPC_CHANNELS.READ_CONFIG, async () => {
     logger$j.debug("Read config from file");
     const fs2 = await import("fs/promises");
-    const configPath = require("path").join(process.cwd(), "qmin.json");
+    const configPath = wpath.configPath;
     try {
       const data = await fs2.readFile(configPath, "utf-8");
       logger$j.info("Config file read successfully");
@@ -647,6 +649,78 @@ class ImageDirRemoveError extends QminException {
   constructor(msg) {
     super(msg, "IV_005");
   }
+}
+function encrypt(content, key) {
+  const iv = crypto__namespace.randomBytes(12);
+  const cipher = crypto__namespace.createCipheriv("aes-256-gcm", key, iv);
+  let encrypted = cipher.update(content, "utf8", "binary");
+  encrypted += cipher.final("binary");
+  const authTag = cipher.getAuthTag();
+  const combined = Buffer.concat([iv, authTag, Buffer.from(encrypted, "binary")]);
+  return combined.toString("base64");
+}
+function decrypt(content, key) {
+  const combinedBuffer = Buffer.from(content, "base64");
+  const iv = combinedBuffer.subarray(0, 12);
+  const authTag = combinedBuffer.subarray(12, 28);
+  const encrypted = combinedBuffer.subarray(28);
+  const decipher = crypto__namespace.createDecipheriv("aes-256-gcm", key, iv);
+  decipher.setAuthTag(authTag);
+  let decrypted = decipher.update(encrypted, void 0, "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
+}
+function b64Encode(content) {
+  return Buffer.from(content, "utf8").toString("base64");
+}
+function b64Decode(content) {
+  return Buffer.from(content, "base64").toString("utf8");
+}
+function urlSafeB64Encode(content) {
+  return b64Encode(content).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+}
+function urlSafeB64Decode(content) {
+  let str = content.replace(/-/g, "+").replace(/_/g, "/");
+  while (str.length % 4) {
+    str += "=";
+  }
+  return b64Decode(str);
+}
+function mix(content) {
+  {
+    return b64Encode(content);
+  }
+}
+function unmix(content) {
+  {
+    return b64Decode(content);
+  }
+}
+function md5sum(content) {
+  return crypto__namespace.createHash("md5").update(content, "utf8").digest("hex");
+}
+function currentTimeObjToStr() {
+  const now = /* @__PURE__ */ new Date();
+  const pad = (n) => n.toString().padStart(2, "0");
+  const year = now.getFullYear();
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
+  const hours = pad(now.getHours());
+  const minutes = pad(now.getMinutes());
+  const seconds = pad(now.getSeconds());
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+function generateRandomString(length = 6) {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+function getFileSizeMB(filePath) {
+  const stats = require("fs").statSync(filePath);
+  return Math.round(stats.size / 1024 / 1024 * 1e3) / 1e3;
 }
 class DBManager {
   constructor(dbPath) {
@@ -741,15 +815,13 @@ class DBManager {
   /**
    * Create database from SQL file if it doesn't exist
    */
-  async createDbIfNotExists() {
-    try {
-      await fs__namespace.access(this.dbPath);
+  createDbIfNotExists() {
+    if (fs__namespace$1.existsSync(this.dbPath)) {
       return;
-    } catch {
     }
     try {
       const sqlFile = wpath.getSqlFile();
-      const sqlScript = await fs__namespace.readFile(sqlFile, "utf-8");
+      const sqlScript = fs__namespace$1.readFileSync(sqlFile, "utf-8");
       const tempDb = new Database(this.dbPath);
       const statements = sqlScript.split(";");
       for (const statement of statements) {
@@ -758,197 +830,13 @@ class DBManager {
           tempDb.exec(trimmed);
         }
       }
-      const { mix: mix2 } = await Promise.resolve().then(() => crypto);
-      const { currentTimeObjToStr: currentTimeObjToStr2 } = await Promise.resolve().then(() => common);
-      tempDb.prepare("INSERT INTO doc_category ('name', 'space', 'create_time') VALUES (?, ?, ?)").run(mix2("默认"), 0, currentTimeObjToStr2());
+      tempDb.prepare("INSERT INTO doc_category ('name', 'space', 'create_time') VALUES (?, ?, ?)").run(mix("默认"), 0, currentTimeObjToStr());
       tempDb.close();
     } catch (err) {
       throw new BaseDBError(`Error creating database: ${err}`);
     }
   }
 }
-function currentTimeObjToStr() {
-  const now = /* @__PURE__ */ new Date();
-  const pad = (n) => n.toString().padStart(2, "0");
-  const year = now.getFullYear();
-  const month = pad(now.getMonth() + 1);
-  const day = pad(now.getDate());
-  const hours = pad(now.getHours());
-  const minutes = pad(now.getMinutes());
-  const seconds = pad(now.getSeconds());
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-function timeStrToObj(strTime) {
-  const [datePart, timePart] = strTime.split(" ");
-  const [year, month, day] = datePart.split("-").map(Number);
-  const [hours, minutes, seconds] = timePart.split(":").map(Number);
-  return new Date(year, month - 1, day, hours, minutes, seconds);
-}
-function generateRandomString(length = 6) {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-}
-function generateUniqueId() {
-  return uuid.v4();
-}
-function getFileSizeMB(filePath) {
-  const stats = require("fs").statSync(filePath);
-  return Math.round(stats.size / 1024 / 1024 * 1e3) / 1e3;
-}
-function getFileSizeBytes(filePath) {
-  const stats = require("fs").statSync(filePath);
-  return stats.size;
-}
-async function fileExists(filePath) {
-  try {
-    await fs__namespace.access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
-async function directoryExists(dirPath) {
-  try {
-    const stats = await fs__namespace.stat(dirPath);
-    return stats.isDirectory();
-  } catch {
-    return false;
-  }
-}
-async function readJsonFile(filePath) {
-  const content = await fs__namespace.readFile(filePath, "utf-8");
-  return JSON.parse(content);
-}
-async function writeJsonFile(filePath, data) {
-  const content = JSON.stringify(data, null, 2);
-  await fs__namespace.writeFile(filePath, content, "utf-8");
-}
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-function isDevelopment$1() {
-  return process.env.NODE_ENV !== "production";
-}
-function isWindows() {
-  return process.platform === "win32";
-}
-function isMacOS() {
-  return process.platform === "darwin";
-}
-function isLinux() {
-  return process.platform === "linux";
-}
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-function truncateString(str, maxLength, suffix = "...") {
-  if (str.length <= maxLength) return str;
-  return str.substring(0, maxLength - suffix.length) + suffix;
-}
-function debounce(func, wait) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
-function throttle(func, limit) {
-  let inThrottle;
-  return (...args) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  };
-}
-const common = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  currentTimeObjToStr,
-  debounce,
-  directoryExists,
-  fileExists,
-  formatNumber,
-  generateRandomString,
-  generateUniqueId,
-  getFileSizeBytes,
-  getFileSizeMB,
-  isDevelopment: isDevelopment$1,
-  isLinux,
-  isMacOS,
-  isWindows,
-  readJsonFile,
-  sleep,
-  throttle,
-  timeStrToObj,
-  truncateString,
-  writeJsonFile
-}, Symbol.toStringTag, { value: "Module" }));
-function encrypt(content, key) {
-  const iv = crypto__namespace.randomBytes(12);
-  const cipher = crypto__namespace.createCipheriv("aes-256-gcm", key, iv);
-  let encrypted = cipher.update(content, "utf8", "binary");
-  encrypted += cipher.final("binary");
-  const authTag = cipher.getAuthTag();
-  const combined = Buffer.concat([iv, authTag, Buffer.from(encrypted, "binary")]);
-  return combined.toString("base64");
-}
-function decrypt(content, key) {
-  const combinedBuffer = Buffer.from(content, "base64");
-  const iv = combinedBuffer.subarray(0, 12);
-  const authTag = combinedBuffer.subarray(12, 28);
-  const encrypted = combinedBuffer.subarray(28);
-  const decipher = crypto__namespace.createDecipheriv("aes-256-gcm", key, iv);
-  decipher.setAuthTag(authTag);
-  let decrypted = decipher.update(encrypted, void 0, "utf8");
-  decrypted += decipher.final("utf8");
-  return decrypted;
-}
-function b64Encode(content) {
-  return Buffer.from(content, "utf8").toString("base64");
-}
-function b64Decode(content) {
-  return Buffer.from(content, "base64").toString("utf8");
-}
-function urlSafeB64Encode(content) {
-  return b64Encode(content).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-}
-function urlSafeB64Decode(content) {
-  let str = content.replace(/-/g, "+").replace(/_/g, "/");
-  while (str.length % 4) {
-    str += "=";
-  }
-  return b64Decode(str);
-}
-function mix(content) {
-  {
-    return b64Encode(content);
-  }
-}
-function unmix(content) {
-  {
-    return b64Decode(content);
-  }
-}
-function md5sum(content) {
-  return crypto__namespace.createHash("md5").update(content, "utf8").digest("hex");
-}
-const crypto = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  b64Decode,
-  b64Encode,
-  decrypt,
-  encrypt,
-  md5sum,
-  mix,
-  unmix,
-  urlSafeB64Decode,
-  urlSafeB64Encode
-}, Symbol.toStringTag, { value: "Module" }));
 const logger$i = createLogger("MdEditorService");
 class MdEditorService {
   constructor() {
@@ -1305,69 +1193,75 @@ class MdEditorService {
   }
 }
 const logger$h = createLogger("IPC:MdEditor");
+let mdEditorService = null;
+function getService$2() {
+  if (!mdEditorService) {
+    mdEditorService = new MdEditorService();
+  }
+  return mdEditorService;
+}
 function registerMdEditorHandlers() {
-  const mdEditorService = new MdEditorService();
   electron.ipcMain.handle(IPC_CHANNELS.MD_GET_CATEGORY_LIST, async (event, space = 0) => {
     logger$h.debug(`Get category list for space ${space}`);
-    return await mdEditorService.getCategoryList(space);
+    return await getService$2().getCategoryList(space);
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_GET_CATEGORY_BY_ID, async (event, id) => {
     logger$h.debug(`Get category by ID ${id}`);
-    return await mdEditorService.getCategoryById(id);
+    return await getService$2().getCategoryById(id);
   });
   electron.ipcMain.handle(
     IPC_CHANNELS.MD_CREATE_CATEGORY,
     async (event, name, space = 0) => {
       logger$h.info(`Create category '${name}' in space ${space}`);
-      return await mdEditorService.createCategory(name, space);
+      return await getService$2().createCategory(name, space);
     }
   );
   electron.ipcMain.handle(IPC_CHANNELS.MD_UPDATE_CATEGORY, async (event, id, params) => {
     logger$h.info(`Update category ${id}`);
-    await mdEditorService.updateCategory(id, params);
+    await getService$2().updateCategory(id, params);
     return { success: true };
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_DELETE_CATEGORY, async (event, id) => {
     logger$h.info(`Delete category ${id}`);
-    await mdEditorService.deleteCategory(id);
+    await getService$2().deleteCategory(id);
     return { success: true };
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_GET_DOC_LIST, async (event, cId) => {
     logger$h.debug(`Get document list for category ${cId}`);
-    return await mdEditorService.getDocList(cId);
+    return await getService$2().getDocList(cId);
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_GET_DOC_BY_ID, async (event, id) => {
     logger$h.debug(`Get document by ID ${id}`);
-    return await mdEditorService.getDocById(id);
+    return await getService$2().getDocById(id);
   });
   electron.ipcMain.handle(
     IPC_CHANNELS.MD_CREATE_DOC,
     async (event, cid, title, summary) => {
       logger$h.info(`Create document '${title}' in category ${cid}`);
-      return await mdEditorService.createDoc(cid, title, summary);
+      return await getService$2().createDoc(cid, title, summary);
     }
   );
   electron.ipcMain.handle(IPC_CHANNELS.MD_UPDATE_DOC, async (event, id, params) => {
     logger$h.info(`Update document ${id}`);
-    await mdEditorService.updateDoc(id, params);
+    await getService$2().updateDoc(id, params);
     return { success: true };
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_DELETE_DOC, async (event, id) => {
     logger$h.info(`Delete document ${id}`);
-    await mdEditorService.deleteDoc(id);
+    await getService$2().deleteDoc(id);
     return { success: true };
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_SAVE_IMAGE, async (event, filePath) => {
     logger$h.info(`Save image from ${filePath}`);
-    return await mdEditorService.saveImage(filePath);
+    return await getService$2().saveImage(filePath);
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_GET_IMAGE, async (event, id) => {
     logger$h.debug(`Get image by ID ${id}`);
-    return await mdEditorService.getImage(id);
+    return await getService$2().getImage(id);
   });
   electron.ipcMain.handle(IPC_CHANNELS.MD_VERIFY_HKEY, async (event, content) => {
     logger$h.debug("Verify hkey");
-    return await mdEditorService.checkHkey(content);
+    return await getService$2().checkHkey(content);
   });
 }
 function isImage(filePath) {
@@ -1943,24 +1837,30 @@ class IVViewerService {
   }
 }
 const logger$f = createLogger("IVViewerHandler");
+let ivViewerService = null;
+function getService$1() {
+  if (!ivViewerService) {
+    ivViewerService = new IVViewerService();
+  }
+  return ivViewerService;
+}
 const indexingTasks = /* @__PURE__ */ new Map();
 function registerIvViewerHandlers() {
-  const ivViewerService = new IVViewerService();
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_DIRECTORIES, async () => {
     logger$f.debug("Get directory structure");
-    return await ivViewerService.getDirStructure();
+    return await getService$1().getDirStructure();
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_REFRESH_DIRECTORIES, async () => {
     logger$f.info("Refresh directory structure");
-    return await ivViewerService.refreshDirStructure();
+    return await getService$1().refreshDirStructure();
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_DIRS_TO_INDEX, async () => {
     logger$f.debug("Get directories to index");
-    return await ivViewerService.getDirsToIndex();
+    return await getService$1().getDirsToIndex();
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_HAS_INDEXING, async (event, pathId) => {
     logger$f.debug(`Check if directory indexed: ${pathId}`);
-    return await ivViewerService.hasIndexing(pathId);
+    return await getService$1().hasIndexing(pathId);
   });
   electron.ipcMain.handle(
     IPC_CHANNELS.IV_START_INDEX,
@@ -1977,14 +1877,14 @@ function registerIvViewerHandlers() {
         allIndexing,
         progress: 0
       });
-      startIndexing(ivViewerService, taskId, pathId);
+      startIndexing(getService$1(), taskId, pathId);
       return { success: true };
     }
   );
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGES, async (event, pathId, score = 0) => {
     logger$f.debug(`Get images from ${pathId} with score >= ${score}`);
-    const images = await ivViewerService.getImages(pathId, score);
-    const idxCacheDir = path__namespace.join(ivViewerService.getCacheDir(pathId));
+    const images = await getService$1().getImages(pathId, score);
+    const idxCacheDir = path__namespace.join(getService$1().getCacheDir(pathId));
     return images.map((img) => ({
       ...img,
       thumbnail_path: `file://${path__namespace.join(idxCacheDir, img.name)}`
@@ -1992,48 +1892,48 @@ function registerIvViewerHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGE, async (event, pathId) => {
     logger$f.debug(`Get image ${pathId}`);
-    return await ivViewerService.getImage(pathId);
+    return await getService$1().getImage(pathId);
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_IMAGE_INFO, async (event, pathId) => {
     logger$f.debug(`Get image info for ${pathId}`);
-    return await ivViewerService.getImageInfo(pathId);
+    return await getService$1().getImageInfo(pathId);
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_GET_META, async (event, pathId) => {
     logger$f.debug(`Get metadata for ${pathId}`);
-    return await ivViewerService.getMeta(pathId);
+    return await getService$1().getMeta(pathId);
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_UPDATE_SCORE, async (event, pathId, score) => {
     logger$f.info(`Update score for ${pathId} to ${score}`);
-    await ivViewerService.updateScore(pathId, score);
+    await getService$1().updateScore(pathId, score);
     return { success: true };
   });
   electron.ipcMain.handle(
     IPC_CHANNELS.IV_CLASSIFY,
     async (event, pathId, classificationName) => {
       logger$f.info(`Classify ${pathId} as '${classificationName}'`);
-      return await ivViewerService.classify(pathId, classificationName);
+      return await getService$1().classify(pathId, classificationName);
     }
   );
   electron.ipcMain.handle(IPC_CHANNELS.IV_IS_CLASSIFIED, async (event, pathId) => {
     logger$f.debug(`Check if ${pathId} is classified`);
-    return await ivViewerService.isClassified(pathId);
+    return await getService$1().isClassified(pathId);
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_REMOVE_DIR, async (event, pathId) => {
     logger$f.info(`Remove directory ${pathId}`);
-    await ivViewerService.removeDir(pathId);
+    await getService$1().removeDir(pathId);
     return { success: true };
   });
   electron.ipcMain.handle(IPC_CHANNELS.IV_REMOVE_INDEX, async (event, pathId) => {
     logger$f.info(`Remove index for ${pathId}`);
-    await ivViewerService.removeIndexDir(pathId);
+    await getService$1().removeIndexDir(pathId);
     return { success: true };
   });
 }
-async function startIndexing(ivViewerService, taskId, pathId, allIndexing) {
+async function startIndexing(ivViewerService2, taskId, pathId, allIndexing) {
   const task = indexingTasks.get(taskId);
   if (!task) return;
   try {
-    for await (const progress of ivViewerService.indexing(pathId)) {
+    for await (const progress of ivViewerService2.indexing(pathId)) {
       task.progress = progress;
       electron.webContents.getAllWebContents().forEach((wc) => {
         if (!wc.isDestroyed()) {
@@ -2625,17 +2525,35 @@ class RoleplayChatService {
 }
 const logger$a = createLogger("RoleplayHandler");
 const activeChats = /* @__PURE__ */ new Map();
+let scenarioService = null;
+let historyService = null;
+let configService = null;
 function getChatKey(scenarioName, historyName) {
   return `${scenarioName}:${historyName}`;
 }
+function getScenarioService() {
+  if (!scenarioService) {
+    scenarioService = new RoleplayScenarioService();
+  }
+  return scenarioService;
+}
+function getHistoryService() {
+  if (!historyService) {
+    historyService = new RoleplayHistoryService();
+  }
+  return historyService;
+}
+function getConfigService() {
+  if (!configService) {
+    configService = new RoleplayConfigService();
+  }
+  return configService;
+}
 function registerRoleplayHandlers() {
-  const scenarioService = new RoleplayScenarioService();
-  const historyService = new RoleplayHistoryService();
-  const configService = new RoleplayConfigService();
   electron.ipcMain.handle(IPC_CHANNELS.RP_LIST_SCENARIOS, async () => {
     logger$a.debug("List scenarios");
     try {
-      return await scenarioService.listScenarios();
+      return await getScenarioService().listScenarios();
     } catch (err) {
       logger$a.error("Failed to list scenarios", err);
       throw err;
@@ -2644,7 +2562,7 @@ function registerRoleplayHandlers() {
   electron.ipcMain.handle(IPC_CHANNELS.RP_GET_SCENARIO, async (_event, name) => {
     logger$a.debug(`Get scenario ${name}`);
     try {
-      return await scenarioService.getScenario(name);
+      return await getScenarioService().getScenario(name);
     } catch (err) {
       logger$a.error(`Failed to get scenario ${name}`, err);
       throw err;
@@ -2655,7 +2573,7 @@ function registerRoleplayHandlers() {
     async (_event, name, data) => {
       logger$a.info(`Create scenario ${name}`);
       try {
-        await scenarioService.createScenario(name, data);
+        await getScenarioService().createScenario(name, data);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to create scenario ${name}`, err);
@@ -2668,7 +2586,7 @@ function registerRoleplayHandlers() {
     async (_event, name, data) => {
       logger$a.info(`Update scenario ${name}`);
       try {
-        await scenarioService.updateScenario(name, data);
+        await getScenarioService().updateScenario(name, data);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to update scenario ${name}`, err);
@@ -2679,7 +2597,7 @@ function registerRoleplayHandlers() {
   electron.ipcMain.handle(IPC_CHANNELS.RP_DELETE_SCENARIO, async (_event, name) => {
     logger$a.info(`Delete scenario ${name}`);
     try {
-      await scenarioService.deleteScenario(name);
+      await getScenarioService().deleteScenario(name);
       return { success: true };
     } catch (err) {
       logger$a.error(`Failed to delete scenario ${name}`, err);
@@ -2690,7 +2608,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_LIST_HISTORIES,
     async (_event, scenarioName) => {
       try {
-        return await historyService.listHistories(scenarioName);
+        return await getHistoryService().listHistories(scenarioName);
       } catch (err) {
         logger$a.error(`Failed to list histories for ${scenarioName}`, err);
         throw err;
@@ -2701,7 +2619,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_GET_HISTORY,
     async (_event, scenarioName, historyName) => {
       try {
-        return await historyService.getHistory(scenarioName, historyName);
+        return await getHistoryService().getHistory(scenarioName, historyName);
       } catch (err) {
         logger$a.error(`Failed to get history ${historyName}`, err);
         throw err;
@@ -2712,7 +2630,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_CREATE_HISTORY,
     async (_event, scenarioName, historyName, data) => {
       try {
-        await historyService.createHistory(scenarioName, historyName, data);
+        await getHistoryService().createHistory(scenarioName, historyName, data);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to create history ${historyName}`, err);
@@ -2724,7 +2642,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_SAVE_HISTORY,
     async (_event, scenarioName, historyName, data) => {
       try {
-        await historyService.saveHistory(scenarioName, historyName, data);
+        await getHistoryService().saveHistory(scenarioName, historyName, data);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to save history ${historyName}`, err);
@@ -2736,7 +2654,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_DELETE_HISTORY,
     async (_event, scenarioName, historyName) => {
       try {
-        await historyService.deleteHistory(scenarioName, historyName);
+        await getHistoryService().deleteHistory(scenarioName, historyName);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to delete history ${historyName}`, err);
@@ -2746,7 +2664,7 @@ function registerRoleplayHandlers() {
   );
   electron.ipcMain.handle(IPC_CHANNELS.RP_LIST_LLM_CONFIGS, async () => {
     try {
-      return await configService.listConfigs();
+      return await getConfigService().listConfigs();
     } catch (err) {
       logger$a.error("Failed to list LLM configs", err);
       throw err;
@@ -2754,7 +2672,7 @@ function registerRoleplayHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.RP_GET_LLM_CONFIG, async (_event, name) => {
     try {
-      return await configService.getConfig(name);
+      return await getConfigService().getConfig(name);
     } catch (err) {
       logger$a.error(`Failed to get LLM config ${name}`, err);
       throw err;
@@ -2764,7 +2682,7 @@ function registerRoleplayHandlers() {
     IPC_CHANNELS.RP_SAVE_LLM_CONFIG,
     async (_event, name, data) => {
       try {
-        await configService.saveConfig(name, data);
+        await getConfigService().saveConfig(name, data);
         return { success: true };
       } catch (err) {
         logger$a.error(`Failed to save LLM config ${name}`, err);
@@ -2776,15 +2694,15 @@ function registerRoleplayHandlers() {
     "qmin:rp:init-chat",
     async (_event, scenarioName, historyName, configName) => {
       try {
-        const scenario = await scenarioService.getScenario(scenarioName);
-        const llmConfig = configName ? await configService.getConfig(configName) : await configService.getDefaultConfig();
+        const scenario = await getScenarioService().getScenario(scenarioName);
+        const llmConfig = configName ? await getConfigService().getConfig(configName) : await getConfigService().getDefaultConfig();
         const chatService = new RoleplayChatService(llmConfig, scenario);
-        const historyExists = await historyService.historyExists(
+        const historyExists = await getHistoryService().historyExists(
           scenarioName,
           historyName
         );
         if (historyExists) {
-          const history = await historyService.getHistory(
+          const history = await getHistoryService().getHistory(
             scenarioName,
             historyName
           );
@@ -2816,7 +2734,7 @@ function registerRoleplayHandlers() {
           messages: chatService.getMessages()
         });
         const historyData = chatService.getHistoryData();
-        await historyService.saveHistory(scenarioName, historyName, historyData);
+        await getHistoryService().saveHistory(scenarioName, historyName, historyData);
         return { success: true };
       } catch (err) {
         logger$a.error("Chat failed", err);
@@ -2841,7 +2759,7 @@ function registerRoleplayHandlers() {
           messages: chatService.getMessages()
         });
         const historyData = chatService.getHistoryData();
-        await historyService.saveHistory(scenarioName, historyName, historyData);
+        await getHistoryService().saveHistory(scenarioName, historyName, historyData);
         return { success: true };
       } catch (err) {
         logger$a.error("Regenerate failed", err);
@@ -2862,7 +2780,7 @@ function registerRoleplayHandlers() {
         const popped = chatService.popMessage();
         if (popped) {
           const historyData = chatService.getHistoryData();
-          await historyService.saveHistory(scenarioName, historyName, historyData);
+          await getHistoryService().saveHistory(scenarioName, historyName, historyData);
         }
         return { success: true, popped };
       } catch (err) {
@@ -3929,12 +3847,18 @@ class ImgGenService {
   }
 }
 const logger$1 = createLogger("ImgGenHandler");
+let imgGenService = null;
+function getService() {
+  if (!imgGenService) {
+    imgGenService = new ImgGenService();
+  }
+  return imgGenService;
+}
 function registerImgGenHandlers() {
-  const imgGenService = new ImgGenService();
   electron.ipcMain.handle(IPC_CHANNELS.IMG_GENERATE, async (event, request) => {
     try {
       logger$1.info("IMG_GENERATE called", { prompt: request.prompt.substring(0, 50) });
-      const result = await imgGenService.generateImage(request);
+      const result = await getService().generateImage(request);
       return result;
     } catch (err) {
       logger$1.error("IMG_GENERATE error", err);
@@ -3947,7 +3871,7 @@ function registerImgGenHandlers() {
   electron.ipcMain.handle(IPC_CHANNELS.IMG_GENERATE_QWEN, async (event, request) => {
     try {
       logger$1.info("IMG_GENERATE_QWEN called", { prompt: request.prompt.substring(0, 50) });
-      const result = await imgGenService.generateImageQwen(request);
+      const result = await getService().generateImageQwen(request);
       return result;
     } catch (err) {
       logger$1.error("IMG_GENERATE_QWEN error", err);
@@ -3959,7 +3883,7 @@ function registerImgGenHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IMG_LIST_HISTORY, async () => {
     try {
-      const history = await imgGenService.listHistory();
+      const history = await getService().listHistory();
       return history;
     } catch (err) {
       logger$1.error("IMG_LIST_HISTORY error", err);
@@ -3968,7 +3892,7 @@ function registerImgGenHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IMG_GET_HISTORY, async (event, recordId) => {
     try {
-      const record = await imgGenService.getHistory(recordId);
+      const record = await getService().getHistory(recordId);
       return record;
     } catch (err) {
       logger$1.error("IMG_GET_HISTORY error", err);
@@ -3977,7 +3901,7 @@ function registerImgGenHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IMG_DELETE_HISTORY, async (event, recordId) => {
     try {
-      await imgGenService.deleteHistory(recordId);
+      await getService().deleteHistory(recordId);
       return { success: true };
     } catch (err) {
       logger$1.error("IMG_DELETE_HISTORY error", err);
@@ -3989,7 +3913,7 @@ function registerImgGenHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IMG_LIST_LLM_CONFIGS, async () => {
     try {
-      const configs = await imgGenService.listLlmConfigs();
+      const configs = await getService().listLlmConfigs();
       return configs;
     } catch (err) {
       logger$1.error("IMG_LIST_LLM_CONFIGS error", err);
@@ -3998,7 +3922,7 @@ function registerImgGenHandlers() {
   });
   electron.ipcMain.handle(IPC_CHANNELS.IMG_GET_LLM_CONFIG, async (event, name) => {
     try {
-      const config2 = await imgGenService.getLlmConfig(name);
+      const config2 = await getService().getLlmConfig(name);
       return config2;
     } catch (err) {
       logger$1.error("IMG_GET_LLM_CONFIG error", err);
@@ -4009,7 +3933,7 @@ function registerImgGenHandlers() {
     IPC_CHANNELS.IMG_SAVE_LLM_CONFIG,
     async (event, name, config2) => {
       try {
-        await imgGenService.saveLlmConfig(name, config2);
+        await getService().saveLlmConfig(name, config2);
         return { success: true };
       } catch (err) {
         logger$1.error("IMG_SAVE_LLM_CONFIG error", err);
@@ -4053,9 +3977,6 @@ async function createWindow() {
     const indexPath = path__namespace.join(__dirname, "../renderer/index.html");
     mainWindow.loadFile(indexPath);
   }
-}
-function getCwd() {
-  return process.cwd();
 }
 function showMsg(title, msg) {
   electron.dialog.showMessageBoxSync({
@@ -4122,7 +4043,7 @@ function createMenu() {
   electron.Menu.setApplicationMenu(menu);
 }
 async function readConfig() {
-  const configPath = path__namespace.join(getCwd(), "qmin.json");
+  const configPath = wpath.configPath;
   try {
     await config.initConfig(configPath);
     logger.info("Config loaded successfully");

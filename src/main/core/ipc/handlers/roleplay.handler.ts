@@ -11,6 +11,11 @@ const logger = createLogger('RoleplayHandler');
 // Store active chat sessions (scenario + history -> chat service)
 const activeChats = new Map<string, RoleplayChatService>();
 
+// Lazy-loaded service instances
+let scenarioService: RoleplayScenarioService | null = null;
+let historyService: RoleplayHistoryService | null = null;
+let configService: RoleplayConfigService | null = null;
+
 /**
  * Get chat session key
  * @param scenarioName - Scenario name
@@ -22,19 +27,47 @@ function getChatKey(scenarioName: string, historyName: string): string {
 }
 
 /**
+ * Get or create scenario service
+ */
+function getScenarioService(): RoleplayScenarioService {
+  if (!scenarioService) {
+    scenarioService = new RoleplayScenarioService();
+  }
+  return scenarioService;
+}
+
+/**
+ * Get or create history service
+ */
+function getHistoryService(): RoleplayHistoryService {
+  if (!historyService) {
+    historyService = new RoleplayHistoryService();
+  }
+  return historyService;
+}
+
+/**
+ * Get or create config service
+ */
+function getConfigService(): RoleplayConfigService {
+  if (!configService) {
+    configService = new RoleplayConfigService();
+  }
+  return configService;
+}
+
+/**
  * Register all roleplay IPC handlers
  */
 export function registerRoleplayHandlers(): void {
-  const scenarioService = new RoleplayScenarioService();
-  const historyService = new RoleplayHistoryService();
-  const configService = new RoleplayConfigService();
+  // Services are now lazily loaded via get*Service() functions
 
   // ========== Scenario Management ==========
 
   ipcMain.handle(IPC_CHANNELS.RP_LIST_SCENARIOS, async () => {
     logger.debug('List scenarios');
     try {
-      return await scenarioService.listScenarios();
+      return await getScenarioService().listScenarios();
     } catch (err) {
       logger.error('Failed to list scenarios', err);
       throw err;
@@ -44,7 +77,7 @@ export function registerRoleplayHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.RP_GET_SCENARIO, async (_event, name: string) => {
     logger.debug(`Get scenario ${name}`);
     try {
-      return await scenarioService.getScenario(name);
+      return await getScenarioService().getScenario(name);
     } catch (err) {
       logger.error(`Failed to get scenario ${name}`, err);
       throw err;
@@ -56,7 +89,7 @@ export function registerRoleplayHandlers(): void {
     async (_event, name: string, data: any) => {
       logger.info(`Create scenario ${name}`);
       try {
-        await scenarioService.createScenario(name, data);
+        await getScenarioService().createScenario(name, data);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to create scenario ${name}`, err);
@@ -70,7 +103,7 @@ export function registerRoleplayHandlers(): void {
     async (_event, name: string, data: any) => {
       logger.info(`Update scenario ${name}`);
       try {
-        await scenarioService.updateScenario(name, data);
+        await getScenarioService().updateScenario(name, data);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to update scenario ${name}`, err);
@@ -82,7 +115,7 @@ export function registerRoleplayHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.RP_DELETE_SCENARIO, async (_event, name: string) => {
     logger.info(`Delete scenario ${name}`);
     try {
-      await scenarioService.deleteScenario(name);
+      await getScenarioService().deleteScenario(name);
       return { success: true };
     } catch (err) {
       logger.error(`Failed to delete scenario ${name}`, err);
@@ -96,7 +129,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_LIST_HISTORIES,
     async (_event, scenarioName: string) => {
       try {
-        return await historyService.listHistories(scenarioName);
+        return await getHistoryService().listHistories(scenarioName);
       } catch (err) {
         logger.error(`Failed to list histories for ${scenarioName}`, err);
         throw err;
@@ -108,7 +141,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_GET_HISTORY,
     async (_event, scenarioName: string, historyName: string) => {
       try {
-        return await historyService.getHistory(scenarioName, historyName);
+        return await getHistoryService().getHistory(scenarioName, historyName);
       } catch (err) {
         logger.error(`Failed to get history ${historyName}`, err);
         throw err;
@@ -120,7 +153,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_CREATE_HISTORY,
     async (_event, scenarioName: string, historyName: string, data: any) => {
       try {
-        await historyService.createHistory(scenarioName, historyName, data);
+        await getHistoryService().createHistory(scenarioName, historyName, data);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to create history ${historyName}`, err);
@@ -133,7 +166,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_SAVE_HISTORY,
     async (_event, scenarioName: string, historyName: string, data: any) => {
       try {
-        await historyService.saveHistory(scenarioName, historyName, data);
+        await getHistoryService().saveHistory(scenarioName, historyName, data);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to save history ${historyName}`, err);
@@ -146,7 +179,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_DELETE_HISTORY,
     async (_event, scenarioName: string, historyName: string) => {
       try {
-        await historyService.deleteHistory(scenarioName, historyName);
+        await getHistoryService().deleteHistory(scenarioName, historyName);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to delete history ${historyName}`, err);
@@ -159,7 +192,7 @@ export function registerRoleplayHandlers(): void {
 
   ipcMain.handle(IPC_CHANNELS.RP_LIST_LLM_CONFIGS, async () => {
     try {
-      return await configService.listConfigs();
+      return await getConfigService().listConfigs();
     } catch (err) {
       logger.error('Failed to list LLM configs', err);
       throw err;
@@ -168,7 +201,7 @@ export function registerRoleplayHandlers(): void {
 
   ipcMain.handle(IPC_CHANNELS.RP_GET_LLM_CONFIG, async (_event, name: string) => {
     try {
-      return await configService.getConfig(name);
+      return await getConfigService().getConfig(name);
     } catch (err) {
       logger.error(`Failed to get LLM config ${name}`, err);
       throw err;
@@ -179,7 +212,7 @@ export function registerRoleplayHandlers(): void {
     IPC_CHANNELS.RP_SAVE_LLM_CONFIG,
     async (_event, name: string, data: any) => {
       try {
-        await configService.saveConfig(name, data);
+        await getConfigService().saveConfig(name, data);
         return { success: true };
       } catch (err) {
         logger.error(`Failed to save LLM config ${name}`, err);
@@ -196,23 +229,23 @@ export function registerRoleplayHandlers(): void {
     async (_event, scenarioName: string, historyName: string, configName?: string) => {
       try {
         // Get scenario
-        const scenario = await scenarioService.getScenario(scenarioName);
+        const scenario = await getScenarioService().getScenario(scenarioName);
 
         // Get LLM config
         const llmConfig = configName
-          ? await configService.getConfig(configName)
-          : await configService.getDefaultConfig();
+          ? await getConfigService().getConfig(configName)
+          : await getConfigService().getDefaultConfig();
 
         // Create chat service
         const chatService = new RoleplayChatService(llmConfig, scenario);
 
         // Load history if exists
-        const historyExists = await historyService.historyExists(
+        const historyExists = await getHistoryService().historyExists(
           scenarioName,
           historyName
         );
         if (historyExists) {
-          const history = await historyService.getHistory(
+          const history = await getHistoryService().getHistory(
             scenarioName,
             historyName
           );
@@ -256,7 +289,7 @@ export function registerRoleplayHandlers(): void {
 
         // Auto-save history
         const historyData = chatService.getHistoryData();
-        await historyService.saveHistory(scenarioName, historyName, historyData);
+        await getHistoryService().saveHistory(scenarioName, historyName, historyData);
 
         return { success: true };
       } catch (err) {
@@ -291,7 +324,7 @@ export function registerRoleplayHandlers(): void {
 
         // Auto-save history
         const historyData = chatService.getHistoryData();
-        await historyService.saveHistory(scenarioName, historyName, historyData);
+        await getHistoryService().saveHistory(scenarioName, historyName, historyData);
 
         return { success: true };
       } catch (err) {
@@ -319,7 +352,7 @@ export function registerRoleplayHandlers(): void {
         // Auto-save history
         if (popped) {
           const historyData = chatService.getHistoryData();
-          await historyService.saveHistory(scenarioName, historyName, historyData);
+          await getHistoryService().saveHistory(scenarioName, historyName, historyData);
         }
 
         return { success: true, popped };

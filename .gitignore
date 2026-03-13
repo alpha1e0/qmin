@@ -1,30 +1,122 @@
-.pytest_cache/
-__pycache__/
-.vscode/
-tmp/
+# ================================
+# Dependencies
+# ================================
+node_modules/
+.pnpm-store/
 
+# ================================
+# Build outputs
+# ================================
 dist/
 dist_electron/
 dist-electron/
 out/
-node_modules/
 build/
+*.min.js
+*.min.css
 
-.DS_Store/
-tmp/
-example/
-.claude/
-coverage/.tmp/
+# ================================
+# Testing
+# ================================
+coverage/
+.nyc_output/
+.vitest/
 
-*.db
-vue.config.js.web
+# E2E测试
+e2e/test-results/
+e2e/playwright-report/
+e2e/.playwright/
+.qmin-test/
 
-qmin.json
-todo.md
+# ================================
+# Logs
+# ================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
+# ================================
+# OS files
+# ================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ================================
+# IDE / Editor
+# ================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ================================
+# Environment variables
+# ================================
+.env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.*.local
 
-# Log files
-npm-debug.log*
-pnpm-debug.log*
+# ================================
+# Database
+# ================================
+*.db
+*.sqlite
+*.sqlite3
+qmin.db
+wos.db
+
+# ================================
+# Temporary files
+# ================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# ================================
+# Project specific
+# ================================
+qmin.json
+todo.md
+vue.config.js.web
+example/
+
+# ================================
+# Claude Code
+# ================================
+.claude/
+!.claude/skills/
+!.claude/skills/**/SKILL.md
+!.claude/skills/**/scripts/
+!.claude/skills/**/references/
+.claude/*.local.*
+.claude/config.json
+
+# ================================
+# Test configuration (sensitive)
+# ================================
+.env.test
+__tests__/test-config.local.json
+__tests__/.env.test.local

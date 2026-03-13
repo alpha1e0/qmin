@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Qmin Test Configuration Schema",
+  "type": "object",
+  "required": ["version", "llm", "imageGen", "database", "paths"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "配置文件版本"
+    },
+    "llm": {
+      "type": "object",
+      "description": "LLM API 配置",
+      "properties": {
+        "openai": {
+          "$ref": "#/definitions/llmConfig"
+        },
+        "default": {
+          "$ref": "#/definitions/llmConfig"
+        }
+      }
+    },
+    "imageGen": {
+      "type": "object",
+      "description": "图像生成 API 配置",
+      "properties": {
+        "flux": {
+          "$ref": "#/definitions/apiConfig"
+        },
+        "gemini": {
+          "$ref": "#/definitions/apiConfig"
+        },
+        "qwen": {
+          "$ref": "#/definitions/apiConfig"
+        }
+      }
+    },
+    "database": {
+      "type": "object",
+      "description": "测试数据库配置",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["memory", "file"]
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "description": "测试环境路径配置"
+    },
+    "encryption": {
+      "type": "object",
+      "description": "加密测试配置",
+      "properties": {
+        "enKey": {
+          "type": "string",
+          "description": "32字节加密密钥"
+        },
+        "hkeyHash": {
+          "type": "string",
+          "description": "热键哈希值"
+        }
+      }
+    },
+    "testSettings": {
+      "type": "object",
+      "description": "测试运行设置",
+      "properties": {
+        "timeout": {
+          "type": "number",
+          "description": "测试超时时间（毫秒）"
+        },
+        "verboseLogging": {
+          "type": "boolean",
+          "description": "是否启用详细日志"
+        },
+        "coverageThreshold": {
+          "type": "object",
+          "properties": {
+            "lines": { "type": "number" },
+            "functions": { "type": "number" },
+            "branches": { "type": "number" },
+            "statements": { "type": "number" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "llmConfig": {
+      "type": "object",
+      "properties": {
+        "base_url": { "type": "string" },
+        "model": { "type": "string" },
+        "key": { "type": "string" },
+        "temperature": { "type": "number", "minimum": 0, "maximum": 2 },
+        "max_tokens": { "type": "number", "minimum": 1 },
+        "proxy": { "type": "string" },
+        "break_prompt": { "type": "string" }
+      }
+    },
+    "apiConfig": {
+      "type": "object",
+      "properties": {
+        "base_url": { "type": "string" },
+        "model": { "type": "string" },
+        "key": { "type": "string" }
+      }
+    }
+  }
+}

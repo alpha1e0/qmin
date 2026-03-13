@@ -115,7 +115,8 @@ export class WPath {
     this.ensureDirectory(this.imgGenHistoryDir);
 
     // Configuration and data files
-    this.configPath = path.join(this.workspace, 'cfg.json');
+    // Configuration file: qmin.json (unified config file name)
+    this.configPath = path.join(this.workspace, 'qmin.json');
     this.qminDatabase = path.join(this.workspace, 'qmin.db');
     this.tasks = path.join(this.workspace, 'tasks.json');
   }

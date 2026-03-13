@@ -2,11 +2,11 @@
  * Main process entry point for Qmin application
  */
 
-import { app, protocol, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
+import { app, protocol, BrowserWindow, Menu, dialog } from 'electron';
 import * as path from 'path';
 
+import { config, wpath } from './core/common/context';
 import { registerAllHandlers } from './core/ipc/handlers';
-import { config } from './core/common/context';
 import { VERSION } from './core/common/constants';
 import { createLogger, LogLevel } from './core/utils/logger';
 
@@ -46,13 +46,6 @@ async function createWindow() {
     const indexPath = path.join(__dirname, '../renderer/index.html');
     mainWindow.loadFile(indexPath);
   }
-}
-
-/**
- * Get current working directory
- */
-function getCwd(): string {
-  return process.cwd();
 }
 
 /**
@@ -136,7 +129,8 @@ function createMenu(): void {
  * Read configuration file
  */
 async function readConfig(): Promise<void> {
-  const configPath = path.join(getCwd(), 'qmin.json');
+  // Use unified config path from wpath: {workspace}/qmin.json
+  const configPath = wpath.configPath;
 
   try {
     await config.initConfig(configPath);

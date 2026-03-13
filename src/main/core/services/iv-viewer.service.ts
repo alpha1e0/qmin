@@ -1,13 +1,12 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-import { config, wpath } from '../common/context';
+import { config } from '../common/context';
 import {
   ImageBasePathNotExists,
   ImagePathNotExists,
   ImageCacheNotExists,
   ImageDirRemoveError,
-  ImageClassifyError,
 } from '../common/exceptions';
 import {
   MIME_MAP,

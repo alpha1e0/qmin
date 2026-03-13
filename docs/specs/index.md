@@ -17,6 +17,34 @@
 
 ## 3. 全局依赖关系 (Global Dependencies)
 
+## 4. 测试基础设施
+
+### 4.1 单元测试 (Vitest)
+
+项目使用 Vitest 进行单元测试，测试文件位于 `src/main/core/` 目录下，与源代码文件并列放置。
+
+**运行命令：**
+- `npm test` - 运行所有单元测试
+- `npm run test:ui` - 使用UI界面运行测试
+- `npm run test:coverage` - 生成测试覆盖率报告
+
+### 4.2 冒烟测试 (Playwright)
+
+项目使用 Playwright 进行端到端冒烟测试，测试文件位于 `e2e/smoke/` 目录。
+
+**测试覆盖：**
+- 应用启动和基本功能
+- 导航功能
+- 各功能模块的基本可用性
+
+**运行命令：**
+- `npm run test:smoke` - 运行所有冒烟测试
+- `npm run test:e2e` - 运行所有E2E测试
+- `npm run test:e2e:ui` - 使用UI界面运行测试
+- `npm run test:e2e:debug` - 使用调试模式运行测试
+
+详细文档请参考：`e2e/README.md`
+
 ## 4. 公共模块设计
 
 ### 4.1 工作目录设计
@@ -27,8 +55,8 @@
 
 工作目录保存：
 
-- 配置文件qmin.json
-- 数据库文件qmin.db
+- 配置文件 qmin.json（主配置文件，位于工作目录根目录）
+- 数据库文件 qmin.db
 - log/目录，保存日志
 - md_editor/目录，用于保存本地markdown编辑器中的插图
 - roleplay/目录，AI角色扮演游戏配置、对话历史
