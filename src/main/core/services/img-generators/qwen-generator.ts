@@ -7,7 +7,7 @@ import axios, { AxiosInstance } from 'axios';
 import { createLogger } from '../../utils/logger';
 import { BaseImgGenerator } from './base-generator';
 import { LLMConfig, ImageGenParams, QwenImageGenParams } from '../../models';
-import { createDataUrl } from '../../utils/image-helper';
+import { createDataUrl } from '../../utils/image';
 
 const logger = createLogger('QwenImgGenerator');
 
