@@ -20,7 +20,7 @@ import { generateThumbnail, getImageSize } from '../utils/image';
 import { isImage } from '../utils/path';
 import { urlSafeB64Encode, urlSafeB64Decode } from '../utils/crypto';
 import { generateRandomString, currentTimeObjToStr, getFileSizeMB } from '../utils/common';
-import { IVDirectory, IVMeta, IVImage } from '../common/config';
+import { IVDirectory, IVMeta, IVImage } from '../models';
 import { createLogger } from '../utils/logger';
 
 const logger = createLogger('IVViewerService');

@@ -6,7 +6,7 @@
 // Core modules
 export * from './common/constants';
 export * from './common/exceptions';
-// Don't export config.ts - it has conflicting type definitions
+export * from './common/config';
 export * from './common/context';
 
 // Database

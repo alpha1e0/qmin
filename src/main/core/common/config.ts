@@ -1,92 +1,11 @@
 /**
  * TypeScript types file for Qmin application
+ *
+ * This file contains configuration types and common types.
+ * Database models are defined in src/main/core/models/
  */
 
-// ============================================================================
-// Database Models
-// ============================================================================
-
-/**
- * Document category model
- */
-export interface DocCategory {
-  id: number;
-  name: string;
-  space: number;
-  create_time: string;
-}
-
-/**
- * Document model
- */
-export interface Doc {
-  id: number;
-  title: string;
-  summary: string;
-  content: string;
-  category_id: number;
-  create_time: string;
-  modify_time: string;
-}
-
-/**
- * Image model
- */
-export interface Image {
-  id: number;
-  name: string;
-  content: Buffer;
-  ext: string;
-  save_path?: string;
-  create_time: string;
-}
-
-/**
- * Image viewer directory model
- */
-export interface IVDirectory {
-  path_id: string;
-  name: string;
-  create_time: string;
-  cla_time?: string;
-  cla_name?: string;
-  children?: IVDirectory[];
-  meta?: IVMeta;
-}
-
-/**
- * Image viewer metadata
- */
-export interface IVMeta {
-  name: string;
-  create_time: string;
-  cla_time?: string;
-  cla_name?: string;
-  s1?: number;
-  s2?: number;
-  s3?: number;
-  s4?: number;
-}
-
-/**
- * Image viewer image info
- */
-export interface IVImage {
-  path_id: string;
-  name: string;
-  score: number;
-  url?: string;
-}
-
-/**
- * Image viewer operation record
- */
-export interface IVOperation {
-  path_id: string;
-  score: number;
-  timestamp: number;
-  operation: string;
-}
+import { IVOperation } from '../models';
 
 // ============================================================================
 // Task Models

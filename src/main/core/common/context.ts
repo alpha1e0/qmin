@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs/promises';
 import { createLogger } from '../utils/logger';
+import { MdEditorConfig, ImgViewerConfig } from './config';
 
 const logger = createLogger('Context');
 
@@ -148,22 +149,6 @@ export class WPath {
       logger.error(`Failed to ensure directory ${dirPath}`, err);
     }
   }
-}
-
-/**
- * Markdown Editor configuration
- */
-export interface MdEditorConfig {
-  en_key?: string;
-  hkey_hash?: string;
-  debug?: boolean;
-}
-
-/**
- * Image Viewer configuration
- */
-export interface ImgViewerConfig {
-  iv_path?: string;
 }
 
 /**
