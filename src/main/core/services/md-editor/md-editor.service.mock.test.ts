@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { MdEditorService } from './md-editor.service';
-import { DBManager } from '../database/db-manager';
-import { config } from '../common/context';
+import { DBManager } from '../../database/db-manager';
+import { config } from '../../common/context';
 
 // Mock the config
 vi.mock('../common/context', () => ({

@@ -5,9 +5,9 @@
 
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { wpath } from '../common/context';
-import { createLogger } from '../utils/logger';
-import { LLMConfig } from '../models';
+import { wpath } from '../../common/context';
+import { createLogger } from '../../utils/logger';
+import { LLMConfig } from '../../models';
 
 const logger = createLogger('ImgConfigService');
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { IVViewerService } from './iv-viewer.service';
-import { config } from '../common/context';
+import { config } from '../../common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { RoleplayScenarioService } from './roleplay-scenario.service';
-import { RoleplayScenario } from '../common/config';
+import { RoleplayScenario } from '../../common/config';
 
 // Mock wpath
 vi.mock('../common/context', () => ({

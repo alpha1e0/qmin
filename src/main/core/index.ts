@@ -22,11 +22,7 @@ export * from './utils/image';
 export * from './utils/common';
 
 // Services
-export * from './services/md-editor.service';
-export * from './services/iv-viewer.service';
-export * from './services/image-parser.service';
-export * from './services/task.service';
-export * from './services/task-manager.service';
+export * from './services';
 
 // IPC
 export * from './ipc/channels';

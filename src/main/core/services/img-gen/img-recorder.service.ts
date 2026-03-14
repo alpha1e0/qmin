@@ -5,14 +5,14 @@
 
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { wpath } from '../common/context';
-import { createLogger } from '../utils/logger';
+import { wpath } from '../../common/context';
+import { createLogger } from '../../utils/logger';
 import {
   ImageGenParams,
   QwenImageGenParams,
   ImageGenRecord,
   HistoryListItem,
-} from '../models';
+} from '../../models';
 
 const logger = createLogger('ImgRecorderService');
 

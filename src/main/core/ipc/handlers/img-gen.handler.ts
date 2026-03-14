@@ -5,7 +5,7 @@
 
 import { ipcMain } from 'electron';
 import { IPC_CHANNELS } from '../channels';
-import { ImgGenService } from '../../services/img-gen.service';
+import { ImgGenService } from '../../services/img-gen';
 import { ImageGenRequest, QwenImageGenRequest, LLMConfig } from '../../models';
 import { createLogger } from '../../utils/logger';
 

@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { wpath } from '../common/context';
-import { createLogger } from '../utils/logger';
-import { RoleplayLLMConfig } from '../common/config';
+import { wpath } from '../../common/context';
+import { createLogger } from '../../utils/logger';
+import { RoleplayLLMConfig } from '../../common/config';
 
 const logger = createLogger('RoleplayConfigService');
 

@@ -1,8 +1,8 @@
 import { ipcMain } from 'electron';
-import { RoleplayScenarioService } from '../../services/roleplay-scenario.service';
-import { RoleplayHistoryService } from '../../services/roleplay-history.service';
-import { RoleplayConfigService } from '../../services/roleplay-config.service';
-import { RoleplayChatService } from '../../services/roleplay-chat.service';
+import { RoleplayScenarioService } from '../../services/roleplay';
+import { RoleplayHistoryService } from '../../services/roleplay';
+import { RoleplayConfigService } from '../../services/roleplay';
+import { RoleplayChatService } from '../../services/roleplay';
 import { IPC_CHANNELS } from '../channels';
 import { createLogger } from '../../utils/logger';
 
