@@ -1,13 +1,13 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-import { config } from '../../common/context';
+import { config } from '@/core/common/context';
 import {
   ImageBasePathNotExists,
   ImagePathNotExists,
   ImageCacheNotExists,
   ImageDirRemoveError,
-} from '../../common/exceptions';
+} from '@/core/common/exceptions';
 import {
   MIME_MAP,
   IV_CACHE_DIR,
@@ -15,13 +15,13 @@ import {
   IV_RESTORE_DIR,
   IV_OP_DB_FILE,
   IV_DIR_DB_FILE,
-} from '../../common/constants';
-import { generateThumbnail, getImageSize } from '../../utils/image';
-import { isImage } from '../../utils/path';
-import { urlSafeB64Encode, urlSafeB64Decode } from '../../utils/crypto';
-import { generateRandomString, currentTimeObjToStr, getFileSizeMB } from '../../utils/common';
-import { IVDirectory, IVMeta, IVImage } from '../../models';
-import { createLogger } from '../../utils/logger';
+} from '@/core/common/constants';
+import { generateThumbnail, getImageSize } from '@/core/utils/image';
+import { isImage } from '@/core/utils/path';
+import { urlSafeB64Encode, urlSafeB64Decode } from '@/core/utils/crypto';
+import { generateRandomString, currentTimeObjToStr, getFileSizeMB } from '@/core/utils/common';
+import { IVDirectory, IVMeta, IVImage } from '@/core/models';
+import { createLogger } from '@/core/utils/logger';
 
 const logger = createLogger('IVViewerService');
 

@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src/main",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -15,10 +15,22 @@
     "declaration": true,
     "sourceMap": true,
     "types": ["node", "electron"],
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/main/*"],
+      "@/core/*": ["src/main/core/*"],
+      "@/core/common/*": ["src/main/core/common/*"],
+      "@/core/models/*": ["src/main/core/models/*"],
+      "@/core/services/*": ["src/main/core/services/*"],
+      "@/core/utils/*": ["src/main/core/utils/*"],
+      "@/core/database/*": ["src/main/core/database/*"],
+      "@/core/ipc/*": ["src/main/core/ipc/*"],
+      "@/preload/*": ["src/preload/*"]
+    }
   },
   "include": ["src/main/**/*", "src/preload/**/*"],
-  "exclude": ["node_modules", "dist", "src/renderer"],
+  "exclude": ["node_modules", "dist", "dist-electron", "src/renderer"],
   "ts-node": {
     "esm": false,
     "compilerOptions": {

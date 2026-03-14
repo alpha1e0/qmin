@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { BaseImgGenerator } from './base-generator';
-import { LLMConfig } from '../../models';
+import { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
+import { LLMConfig } from '../../../models';
 
 // Mock logger
 vi.mock('../../utils/logger', () => ({

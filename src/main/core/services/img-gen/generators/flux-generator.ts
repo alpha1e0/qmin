@@ -3,9 +3,9 @@
  * Supports Flux.2 model (image-only modality)
  */
 
-import { createLogger } from '../../utils/logger';
-import { GeminiImgGenerator } from './gemini-generator';
-import { LLMConfig } from '../../models';
+import { createLogger } from '@/core/utils/logger';
+import { GeminiImgGenerator } from '@/core/services/img-gen/generators/gemini-generator';
+import { LLMConfig } from '@/core/models';
 
 const logger = createLogger('FluxImgGenerator');
 

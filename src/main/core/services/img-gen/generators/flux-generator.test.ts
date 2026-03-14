@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { FluxImgGenerator } from './flux-generator';
-import { LLMConfig } from '../../models';
+import { FluxImgGenerator } from '@/core/services/img-gen/generators/flux-generator';
+import { LLMConfig } from '../../../models';
 
 // Mock logger
 vi.mock('../../utils/logger', () => ({

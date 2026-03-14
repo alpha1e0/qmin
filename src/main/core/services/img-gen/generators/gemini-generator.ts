@@ -4,9 +4,9 @@
  */
 
 import OpenAI from 'openai';
-import { createLogger } from '../../utils/logger';
-import { BaseImgGenerator } from './base-generator';
-import { LLMConfig, ImageGenParams } from '../../models';
+import { createLogger } from '@/core/utils/logger';
+import { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
+import { LLMConfig, ImageGenParams } from '@/core/models';
 
 const logger = createLogger('GeminiImgGenerator');
 
@@ -57,7 +57,7 @@ export class GeminiImgGenerator extends BaseImgGenerator {
       ];
 
       // Add reference images
-      const { createDataUrl } = await import('../../utils/image');
+      const { createDataUrl } = await import('@/core/utils/image');
       for (const imgContent of refImages) {
         const imgUrl = createDataUrl(imgContent);
         query.push({

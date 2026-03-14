@@ -1,8 +1,8 @@
 import { ipcMain } from 'electron';
 import { IPC_CHANNELS } from '../channels';
-import { config, wpath } from '../../common/context';
-import { VERSION } from '../../common/constants';
-import { createLogger } from '../../utils/logger';
+import { config, wpath } from '@/core/common/context';
+import { VERSION } from '@/core/common/constants';
+import { createLogger } from '@/core/utils/logger';
 
 const logger = createLogger('IPC:Common');
 

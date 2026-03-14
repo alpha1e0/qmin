@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { MdEditorService } from './md-editor.service';
+import { MdEditorService } from '@/core/services/md-editor/md-editor.service';
 import { DBManager } from '../../database/db-manager';
 import { config } from '../../common/context';
 

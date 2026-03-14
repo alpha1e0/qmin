@@ -4,7 +4,7 @@ import {
   DocCategoryWithCount,
   CategoryCreate,
   CategoryUpdate,
-} from './category.model';
+} from '@/core/models/category.model';
 
 describe('Category Model', () => {
   describe('DocCategory interface', () => {

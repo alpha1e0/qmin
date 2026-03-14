@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs/promises';
-import { createLogger } from '../utils/logger';
-import { MdEditorConfig, ImgViewerConfig } from './config';
+import { createLogger } from '@/core/utils/logger';
+import { MdEditorConfig, ImgViewerConfig } from '@/core/common/config';
 
 const logger = createLogger('Context');
 

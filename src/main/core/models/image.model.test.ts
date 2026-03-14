@@ -4,7 +4,7 @@ import {
   ImageListItem,
   ImageCreate,
   ImageResponse,
-} from './image.model';
+} from '@/core/models/image.model';
 
 describe('Image Model', () => {
   describe('Image interface', () => {

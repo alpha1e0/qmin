@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from './task.service';
+import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from '@/core/services/task/task.service';
 import { wpath } from '../../common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';

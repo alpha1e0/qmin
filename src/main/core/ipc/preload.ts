@@ -3,7 +3,7 @@
  * Exposes IPC APIs to the renderer process
  */
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS } from './channels';
+import { IPC_CHANNELS } from '@/core/ipc/channels';
 
 /**
  * API exposed to renderer process

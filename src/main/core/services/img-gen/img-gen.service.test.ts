@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ImgGenService } from './img-gen.service';
-import { ImageGenRequest, QwenImageGenRequest } from '../models';
+import { ImgGenService } from '@/core/services/img-gen/img-gen.service';
+import { ImageGenRequest, QwenImageGenRequest } from '@/core/models';
 
 // Mock logger
 vi.mock('../utils/logger', () => ({

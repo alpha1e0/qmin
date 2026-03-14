@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { QwenImgGenerator } from './qwen-generator';
-import { LLMConfig } from '../../models';
+import { QwenImgGenerator } from '@/core/services/img-gen/generators/qwen-generator';
+import { LLMConfig } from '../../../models';
 
 // Mock logger
 vi.mock('../../utils/logger', () => ({

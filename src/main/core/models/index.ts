@@ -3,9 +3,9 @@
  * All models are interfaces defined in config.ts for type safety
  */
 
-export * from './user.model';
-export * from './doc.model';
-export * from './category.model';
-export * from './image.model';
-export * from './iv-viewer.model';
-export * from './img-gen.model';
+export * from '@/core/models/user.model';
+export * from '@/core/models/doc.model';
+export * from '@/core/models/category.model';
+export * from '@/core/models/image.model';
+export * from '@/core/models/iv-viewer.model';
+export * from '@/core/models/img-gen.model';

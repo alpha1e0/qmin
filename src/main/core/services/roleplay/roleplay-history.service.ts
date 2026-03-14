@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { wpath } from '../../common/context';
-import { createLogger } from '../../utils/logger';
-import { RoleplayChatHistory } from '../../common/config';
+import { wpath } from '@/core/common/context';
+import { createLogger } from '@/core/utils/logger';
+import { RoleplayChatHistory } from '@/core/common/config';
 
 const logger = createLogger('RoleplayHistoryService');
 

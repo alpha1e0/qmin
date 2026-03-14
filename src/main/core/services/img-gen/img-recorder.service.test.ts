@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { ImgRecorderService } from './img-recorder.service';
+import { ImgRecorderService } from '@/core/services/img-gen/img-recorder.service';
 
 // Mock wpath
 vi.mock('../common/context', () => ({
@@ -180,7 +180,7 @@ describe('ImgRecorderService', () => {
 
       // Mock downloadImageFromUrl
       const mockImageData = Buffer.from('downloaded image');
-      vi.doMock('../utils/image-helper', () => ({
+      vi.doMock('@/core/utils/image', () => ({
         downloadImageFromUrl: vi.fn().mockResolvedValue(mockImageData),
       }));
 

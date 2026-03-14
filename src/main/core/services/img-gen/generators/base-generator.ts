@@ -3,9 +3,9 @@
  * Abstract base class for all image generators
  */
 
-import { createLogger } from '../../utils/logger';
-import { LLMConfig, ImageGenParams } from '../../models';
-import { ImgRecorderService } from '../img-recorder.service';
+import { createLogger } from '@/core/utils/logger';
+import { LLMConfig, ImageGenParams } from '@/core/models';
+import { ImgRecorderService } from '@/core/services/img-gen/img-recorder.service';
 
 const logger = createLogger('BaseImgGenerator');
 
@@ -41,7 +41,7 @@ export abstract class BaseImgGenerator {
    * @returns Processed image bytes
    */
   async prepareImg(imgBytes: Buffer, fileName: string): Promise<Buffer> {
-    const { convertImageToJpeg } = await import('../../utils/image');
+    const { convertImageToJpeg } = await import('@/core/utils/image');
     const newImgBytes = await convertImageToJpeg(imgBytes);
     // Recording will be done by the caller
     return newImgBytes;

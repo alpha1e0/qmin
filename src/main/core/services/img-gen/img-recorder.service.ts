@@ -5,14 +5,14 @@
 
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { wpath } from '../../common/context';
-import { createLogger } from '../../utils/logger';
+import { wpath } from '@/core/common/context';
+import { createLogger } from '@/core/utils/logger';
 import {
   ImageGenParams,
   QwenImageGenParams,
   ImageGenRecord,
   HistoryListItem,
-} from '../../models';
+} from '@/core/models';
 
 const logger = createLogger('ImgRecorderService');
 
@@ -120,13 +120,13 @@ export class ImgRecorderService {
 
     // Check if it's a base64 data URL
     if (base64OrUrl.startsWith('data:')) {
-      const { extractBase64FromDataUrl } = await import('../utils/image-helper');
+      const { extractBase64FromDataUrl } = await import('@/core/utils/image');
       const base64 = extractBase64FromDataUrl(base64OrUrl);
       const imgBytes = Buffer.from(base64, 'base64');
       await this.recordImage(recordId, imgBytes, fileName);
     } else {
       // It's a URL, download the image
-      const { downloadImageFromUrl } = await import('../utils/image-helper');
+      const { downloadImageFromUrl } = await import('@/core/utils/image');
       const imgBytes = await downloadImageFromUrl(base64OrUrl);
       await this.recordImage(recordId, imgBytes, fileName);
     }

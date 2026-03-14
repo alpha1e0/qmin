@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { RoleplayConfigService } from './roleplay-config.service';
+import { RoleplayConfigService } from '@/core/services/roleplay/roleplay-config.service';
 import { RoleplayLLMConfig } from '../../common/config';
 
 // Mock wpath

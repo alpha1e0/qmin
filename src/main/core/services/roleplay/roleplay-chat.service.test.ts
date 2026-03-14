@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { RoleplayChatService } from './roleplay-chat.service';
+import { RoleplayChatService } from '@/core/services/roleplay/roleplay-chat.service';
 import { RoleplayLLMConfig, RoleplayScenario, RoleplayMessage } from '../../common/config';
 
 // Mock logger

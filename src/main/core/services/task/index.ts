@@ -2,5 +2,5 @@
  * Task Service Module
  */
 
-export * from './task.service';
-export * from './task-manager.service';
+export * from '@/core/services/task/task.service';
+export * from '@/core/services/task/task-manager.service';

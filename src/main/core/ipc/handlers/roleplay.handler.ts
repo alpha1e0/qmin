@@ -1,10 +1,10 @@
 import { ipcMain } from 'electron';
-import { RoleplayScenarioService } from '../../services/roleplay';
-import { RoleplayHistoryService } from '../../services/roleplay';
-import { RoleplayConfigService } from '../../services/roleplay';
-import { RoleplayChatService } from '../../services/roleplay';
+import { RoleplayScenarioService } from '@/core/services/roleplay';
+import { RoleplayHistoryService } from '@/core/services/roleplay';
+import { RoleplayConfigService } from '@/core/services/roleplay';
+import { RoleplayChatService } from '@/core/services/roleplay';
 import { IPC_CHANNELS } from '../channels';
-import { createLogger } from '../../utils/logger';
+import { createLogger } from '@/core/utils/logger';
 
 const logger = createLogger('RoleplayHandler');
 

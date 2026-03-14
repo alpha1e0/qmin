@@ -4,7 +4,7 @@ import {
   DocListItem,
   DocCreate,
   DocUpdate,
-} from './doc.model';
+} from '@/core/models/doc.model';
 
 describe('Doc Model', () => {
   describe('Doc interface', () => {

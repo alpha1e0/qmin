@@ -5,9 +5,9 @@
 
 import { ipcMain } from 'electron';
 import { IPC_CHANNELS } from '../channels';
-import { ImgGenService } from '../../services/img-gen';
-import { ImageGenRequest, QwenImageGenRequest, LLMConfig } from '../../models';
-import { createLogger } from '../../utils/logger';
+import { ImgGenService } from '@/core/services/img-gen';
+import { ImageGenRequest, QwenImageGenRequest, LLMConfig } from '@/core/models';
+import { createLogger } from '@/core/utils/logger';
 
 const logger = createLogger('ImgGenHandler');
 

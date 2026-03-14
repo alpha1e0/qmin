@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { GeminiImgGenerator } from './gemini-generator';
-import { LLMConfig } from '../../models';
+import { GeminiImgGenerator } from '@/core/services/img-gen/generators/gemini-generator';
+import { LLMConfig } from '../../../models';
 
 // Mock logger
 vi.mock('../../utils/logger', () => ({
