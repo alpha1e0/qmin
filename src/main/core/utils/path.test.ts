@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import * as os from 'os';
 import {
   getInnerCurPath,
   isImage,
@@ -178,7 +179,7 @@ describe('Path Utils', () => {
 
   describe('ensureDirectory', () => {
     it('should create directory if not exists', async () => {
-      const testDir = '/tmp/test-ensure-dir';
+      const testDir = os.tmpdir() + '/test-ensure-dir';
       await ensureDirectory(testDir);
       // Note: cleanup would happen in test teardown
       // For now, just verify no error thrown

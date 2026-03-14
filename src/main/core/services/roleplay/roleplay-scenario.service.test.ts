@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
+import * as os from 'os';
 import * as path from 'path';
 import { RoleplayScenarioService } from '@/core/services/roleplay/roleplay-scenario.service';
 import { RoleplayScenario } from '../../common/config';
@@ -7,13 +8,13 @@ import { RoleplayScenario } from '../../common/config';
 // Mock wpath
 vi.mock('../common/context', () => ({
   wpath: {
-    roleplayScenarioDir: '/tmp/test-roleplay-scenarios',
+    roleplayScenarioDir: os.tmpdir() + '/',
   },
 }));
 
 describe('RoleplayScenarioService', () => {
   const service = new RoleplayScenarioService();
-  const testScenarioDir = '/tmp/test-roleplay-scenarios';
+  const testScenarioDir = os.tmpdir() + '/';
 
   const mockScenario: RoleplayScenario = {
     assistant_name: 'AI Assistant',

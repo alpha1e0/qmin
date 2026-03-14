@@ -1,5 +1,10 @@
 import { beforeAll } from 'vitest';
 import { vi } from 'vitest';
+import * as os from 'os';
+import * as path from 'path';
+
+// Cross-platform temp directory
+const tmpDir = os.tmpdir();
 
 // Mock better-sqlite3 for Node.js environment testing
 // The native module is compiled for Electron, not Node.js
@@ -210,27 +215,27 @@ vi.mock('../common/context', () => ({
     qminDatabase: ':memory:',
     getSqlFile: () => '',
     getSqlFilePath: () => '',
-    logDirectory: '/tmp/log',
-    tempDirectory: '/tmp/tmp',
-    mdEditorDir: '/tmp/md_editor',
-    mdEditorImgDir: '/tmp/md_editor/img',
-    roleplayDir: '/tmp/roleplay',
-    roleplayScenarioDir: '/tmp/roleplay/scenario',
-    roleplayLlmConfigsDir: '/tmp/roleplay/llm_configs',
-    imgGenDir: '/tmp/img_gen',
-    imgGenLlmConfigsDir: '/tmp/img_gen/llm_configs',
-    imgGenHistoryDir: '/tmp/img_gen/history',
-    configPath: '/tmp/qmin.json',  // Changed from cfg.json to qmin.json
-    tasks: '/tmp/tasks.json',
+    logDirectory: path.join(tmpDir, 'log'),
+    tempDirectory: path.join(tmpDir, 'tmp'),
+    mdEditorDir: path.join(tmpDir, 'md_editor'),
+    mdEditorImgDir: path.join(tmpDir, 'md_editor', 'img'),
+    roleplayDir: path.join(tmpDir, 'roleplay'),
+    roleplayScenarioDir: path.join(tmpDir, 'roleplay', 'scenario'),
+    roleplayLlmConfigsDir: path.join(tmpDir, 'roleplay', 'llm_configs'),
+    imgGenDir: path.join(tmpDir, 'img_gen'),
+    imgGenLlmConfigsDir: path.join(tmpDir, 'img_gen', 'llm_configs'),
+    imgGenHistoryDir: path.join(tmpDir, 'img_gen', 'history'),
+    configPath: path.join(tmpDir, 'qmin.json'),  // Changed from cfg.json to qmin.json
+    tasks: path.join(tmpDir, 'tasks.json'),
     currentDirectory: process.cwd(),
-    userDirectory: '/tmp',
-    workspace: '/tmp/.qmin',
+    userDirectory: tmpDir,
+    workspace: path.join(tmpDir, '.qmin'),
     // Legacy property getters for backward compatibility
     get curDir() { return process.cwd(); },
-    get userDir() { return '/tmp'; },
-    get logDir() { return '/tmp/log'; },
-    get tmpDir() { return '/tmp/tmp'; },
-    get cfg() { return '/tmp/qmin.json'; },  // Changed from cfg.json to qmin.json (deprecated alias)
+    get userDir() { return tmpDir; },
+    get logDir() { return path.join(tmpDir, 'log'); },
+    get tmpDir() { return path.join(tmpDir, 'tmp'); },
+    get cfg() { return path.join(tmpDir, 'qmin.json'); },  // Changed from cfg.json to qmin.json (deprecated alias)
     get qminDb() { return ':memory:'; },
   },
   config: {
@@ -240,7 +245,7 @@ vi.mock('../common/context', () => ({
       debug: true,
     },
     imgViewer: {
-      ivPath: '/tmp/images',
+      ivPath: path.join(tmpDir, 'images'),
     },
     roleplay: {
       defaultLlmConfig: 'config.json',

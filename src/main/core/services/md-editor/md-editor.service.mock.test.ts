@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import * as os from 'os';
 import { MdEditorService } from '@/core/services/md-editor/md-editor.service';
-import { DBManager } from '../../database/db-manager';
-import { config } from '../../common/context';
+import { DBManager } from '@/core/database/db-manager';
+import { config } from '@/core/common/context';
 
 // Mock the config
 vi.mock('../common/context', () => ({
@@ -15,7 +16,7 @@ vi.mock('../common/context', () => ({
       debug: true,
     },
     imgViewer: {
-      ivPath: '/tmp/images',
+      ivPath: os.tmpdir() + '/images',
     },
   },
 }));

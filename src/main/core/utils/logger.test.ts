@@ -1,17 +1,18 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import * as os from 'os';
 import { Logger, LogLevel, createLogger } from './logger';
 import * as fs from 'fs/promises';
 
 // Mock wpath
 vi.mock('../common/context', () => ({
   wpath: {
-    logDir: '/tmp/test-logs',
+    logDir: os.tmpdir() + '/test-logs',
   },
 }));
 
 describe('Logger', () => {
   let logger: Logger;
-  const testLogDir = '/tmp/test-logs';
+  const testLogDir = os.tmpdir() + '/test-logs';
 
   beforeEach(async () => {
     await fs.mkdir(testLogDir, { recursive: true });

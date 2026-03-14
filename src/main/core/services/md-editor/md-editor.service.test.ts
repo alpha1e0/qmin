@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import * as os from 'os';
 import { MdEditorService } from '@/core/services/md-editor/md-editor.service';
-import { config } from '../../common/context';
+import { config } from '@/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -10,7 +11,7 @@ describe('MdEditorService', () => {
 
   beforeEach(async () => {
     // 设置测试数据库路径
-    testDbPath = path.join(process.env.TMP || '/tmp', `test-md-editor-${Date.now()}.db`);
+    testDbPath = path.join(process.env.TMP || os.tmpdir(), `test-md-editor-${Date.now()}.db`);
     process.env.TEST_QMIN_DB = testDbPath;
 
     // 确保config.mdEditor有正确的值

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import * as os from 'os';
 import { IVViewerService } from '@/core/services/iv-viewer/iv-viewer.service';
-import { config } from '../../common/context';
+import { config } from '@/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -10,7 +11,7 @@ describe('IVViewerService', () => {
 
   beforeEach(async () => {
     // 创建临时测试目录
-    testBasePath = path.join(process.env.TMP || '/tmp', `test-iv-${Date.now()}`);
+    testBasePath = path.join(process.env.TMP || os.tmpdir(), `test-iv-${Date.now()}`);
     await fs.mkdir(testBasePath, { recursive: true });
 
     // 设置图片查看器路径

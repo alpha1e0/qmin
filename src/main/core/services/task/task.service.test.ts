@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import * as os from 'os';
 import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from '@/core/services/task/task.service';
-import { wpath } from '../../common/context';
+import { wpath } from '@/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -12,7 +13,7 @@ describe('Task', () => {
 
   beforeEach(async () => {
     // 设置测试任务数据库路径
-    testTasksPath = path.join(process.env.TMP || '/tmp', `test-tasks-${Date.now()}.json`);
+    testTasksPath = path.join(process.env.TMP || os.tmpdir(), `test-tasks-${Date.now()}.json`);
 
     // Save original path and override wpath.tasks
     originalTasksPath = wpath.tasks;

@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
+import * as os from 'os';
 import * as path from 'path';
 import { ImgRecorderService } from '@/core/services/img-gen/img-recorder.service';
 
 // Mock wpath
 vi.mock('../common/context', () => ({
   wpath: {
-    imgGenHistoryDir: '/tmp/test-img-gen-history',
+    imgGenHistoryDir: os.tmpdir() + '/',
   },
 }));
 
@@ -22,7 +23,7 @@ vi.mock('../utils/logger', () => ({
 
 describe('ImgRecorderService', () => {
   let service: ImgRecorderService;
-  const testHistoryDir = '/tmp/test-img-gen-history';
+  const testHistoryDir = os.tmpdir() + '/';
 
   beforeEach(async () => {
     service = new ImgRecorderService();

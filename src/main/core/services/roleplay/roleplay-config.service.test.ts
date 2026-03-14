@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
+import * as os from 'os';
 import * as path from 'path';
 import { RoleplayConfigService } from '@/core/services/roleplay/roleplay-config.service';
 import { RoleplayLLMConfig } from '../../common/config';
@@ -7,7 +8,7 @@ import { RoleplayLLMConfig } from '../../common/config';
 // Mock wpath
 vi.mock('../common/context', () => ({
   wpath: {
-    roleplayLlmConfigsDir: '/tmp/test-roleplay-configs',
+    roleplayLlmConfigsDir: os.tmpdir() + '/',
   },
 }));
 
@@ -16,7 +17,7 @@ const originalEnv = process.env;
 
 describe('RoleplayConfigService', () => {
   const service = new RoleplayConfigService();
-  const testConfigsDir = '/tmp/test-roleplay-configs';
+  const testConfigsDir = os.tmpdir() + '/';
 
   const mockConfig: RoleplayLLMConfig = {
     base_url: 'https://api.example.com',
