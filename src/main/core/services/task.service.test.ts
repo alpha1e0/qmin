@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { Task, IVTask, TaskStatus, TaskType, TaskEvent } from './task.service';
+import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from './task.service';
 import { wpath } from '../common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -43,7 +43,7 @@ describe('Task', () => {
     it('should create a task with identifier', async () => {
       const task = await Task.create('test-task-1');
       expect(task.identifier).toBe('test-task-1');
-      expect(task.status).toBe(TaskStatus.INIT);
+      expect(task.status).toBe(BgTaskStatus.INIT);
       expect(task.progress).toBe(0);
     });
 
@@ -55,8 +55,8 @@ describe('Task', () => {
     });
 
     it('should create a task with specific type', async () => {
-      const task = await Task.create('test-task-3', {}, TaskType.DEFAULT);
-      expect(task.task_type).toBe(TaskType.DEFAULT);
+      const task = await Task.create('test-task-3', {}, BgTaskType.DEFAULT);
+      expect(task.task_type).toBe(BgTaskType.DEFAULT);
     });
 
     it('should not allow duplicate task identifiers', async () => {
@@ -69,7 +69,7 @@ describe('Task', () => {
       const invalidData = {
         identifier: 'invalid-task',
         task_type: 0,
-        status: TaskStatus.INIT,
+        status: BgTaskStatus.INIT,
         progress: 150, // Invalid: > 100
         params: {},
         event: 0,
@@ -123,22 +123,22 @@ describe('Task', () => {
     it('should update task status', async () => {
       const task = await Task.create('status-test-task');
 
-      await task.updateStatus(TaskStatus.STARTED, 50);
+      await task.updateStatus(BgTaskStatus.STARTED, 50);
 
-      expect(task.status).toBe(TaskStatus.STARTED);
+      expect(task.status).toBe(BgTaskStatus.STARTED);
       expect(task.progress).toBe(50);
     });
 
     it('should fail to update with invalid status', async () => {
       const task = await Task.create('invalid-status-task');
 
-      await expect(task.updateStatus('invalid' as TaskStatus, 50)).rejects.toThrow('wrong');
+      await expect(task.updateStatus('invalid' as BgTaskStatus, 50)).rejects.toThrow('wrong');
     });
 
     it('should fail to update with invalid progress', async () => {
       const task = await Task.create('invalid-progress-task');
 
-      await expect(task.updateStatus(TaskStatus.STARTED, 150)).rejects.toThrow('between 0 and 100');
+      await expect(task.updateStatus(BgTaskStatus.STARTED, 150)).rejects.toThrow('between 0 and 100');
     });
 
     it('should set task as finished', async () => {
@@ -150,7 +150,7 @@ describe('Task', () => {
 
       await task.setFinish({ success: true, data: { result: 'done' } });
 
-      expect(task.status).toBe(TaskStatus.FINISHED);
+      expect(task.status).toBe(BgTaskStatus.FINISHED);
       expect(task.progress).toBe(100);
       expect(task.result.success).toBe(true);
       expect(task.finishTime).toBeDefined();
@@ -165,7 +165,7 @@ describe('Task', () => {
 
       await task.start();
 
-      expect(task.status).toBe(TaskStatus.STARTED);
+      expect(task.status).toBe(BgTaskStatus.STARTED);
       expect(task.startTime).toBeDefined();
     });
 
@@ -185,17 +185,17 @@ describe('Task', () => {
     it('should get and set task event', async () => {
       const task = await Task.create('event-test-task');
 
-      expect(task.getEvent()).toBe(TaskEvent.NORMAL);
+      expect(task.getEvent()).toBe(BgTaskEvent.NORMAL);
 
-      await task.setEvent(TaskEvent.TIMEOUT_KILL);
+      await task.setEvent(BgTaskEvent.TIMEOUT_KILL);
 
-      expect(task.getEvent()).toBe(TaskEvent.TIMEOUT_KILL);
+      expect(task.getEvent()).toBe(BgTaskEvent.TIMEOUT_KILL);
     });
 
     it('should fail to set invalid event', async () => {
       const task = await Task.create('invalid-event-task');
 
-      await expect(task.setEvent(999 as TaskEvent)).rejects.toThrow('wrong');
+      await expect(task.setEvent(999 as BgTaskEvent)).rejects.toThrow('wrong');
     });
   });
 
@@ -222,7 +222,7 @@ describe('Task', () => {
 
       expect(ivTask.identifier).toBe('iv-test-task');
       expect(ivTask.params.img_dir).toBe('/path/to/images');
-      expect(ivTask.task_type).toBe(TaskType.IMG_OP);
+      expect(ivTask.task_type).toBe(BgTaskType.IMG_OP);
     });
 
     it('should run IV task', async () => {
@@ -239,15 +239,15 @@ describe('Task', () => {
       const task = await Task.create('getter-setter-task');
 
       expect(task.identifier).toBe('getter-setter-task');
-      expect(task.status).toBe(TaskStatus.INIT);
+      expect(task.status).toBe(BgTaskStatus.INIT);
       expect(task.progress).toBe(0);
 
       task.identifier = 'new-identifier';
-      task.status = TaskStatus.STARTED;
+      task.status = BgTaskStatus.STARTED;
       task.progress = 75;
 
       expect(task.identifier).toBe('new-identifier');
-      expect(task.status).toBe(TaskStatus.STARTED);
+      expect(task.status).toBe(BgTaskStatus.STARTED);
       expect(task.progress).toBe(75);
     });
   });

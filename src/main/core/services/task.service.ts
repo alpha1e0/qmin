@@ -10,9 +10,9 @@ import { generateThumbnailOfDir } from '../utils/image';
 import { currentTimeObjToStr, timeStrToObj, readJsonFile, writeJsonFile } from '../utils/common';
 
 /**
- * Task Status Enum
+ * Background Task Status Enum
  */
-export enum TaskStatus {
+export enum BgTaskStatus {
   INIT = 'init',
   STARTED = 'started',
   FINISHED = 'finished',
@@ -21,17 +21,17 @@ export enum TaskStatus {
 }
 
 /**
- * Task Type Enum
+ * Background Task Type Enum
  */
-export enum TaskType {
+export enum BgTaskType {
   DEFAULT = 0,
   IMG_OP = 1,
 }
 
 /**
- * Task Event Enum
+ * Background Task Event Enum
  */
-export enum TaskEvent {
+export enum BgTaskEvent {
   NORMAL = 0,
   TIMEOUT_KILL = 1,
 }
@@ -56,7 +56,7 @@ export interface TaskData {
   status: string;
   progress: number;
   params: Record<string, any>;
-  event: number;
+  event: BgTaskEvent;
   result: TaskResult;
   start_time: string;
   finish_time: string;
@@ -83,7 +83,7 @@ export class Task {
    */
   async start(): Promise<void> {
     this.data.start_time = currentTimeObjToStr();
-    await this.updateStatus(TaskStatus.STARTED, this.progress);
+    await this.updateStatus(BgTaskStatus.STARTED, this.progress);
     await this.run();
   }
 
@@ -97,7 +97,7 @@ export class Task {
   /**
    * Update task status and progress
    */
-  async updateStatus(status: TaskStatus, progress: number): Promise<number> {
+  async updateStatus(status: BgTaskStatus, progress: number): Promise<number> {
     if (!this.isValidStatus(status)) {
       throw new Error('Task status wrong');
     }
@@ -116,7 +116,7 @@ export class Task {
    * Set task finish
    */
   async setFinish(result: TaskResult = { success: true }): Promise<number> {
-    this.data.status = TaskStatus.FINISHED;
+    this.data.status = BgTaskStatus.FINISHED;
     this.data.progress = 100;
 
     if (Object.keys(result).length > 0) {
@@ -162,7 +162,7 @@ export class Task {
   static async create(
     identifier: string,
     params: Record<string, any> = {},
-    taskType: TaskType = TaskType.DEFAULT
+    taskType: BgTaskType = BgTaskType.DEFAULT
   ): Promise<Task> {
     const oldTask = await Task.get(identifier);
     if (oldTask) {
@@ -172,10 +172,10 @@ export class Task {
     const taskRaw: TaskData = {
       identifier,
       task_type: taskType,
-      status: TaskStatus.INIT,
+      status: BgTaskStatus.INIT,
       progress: 0,
       params,
-      event: TaskEvent.NORMAL,
+      event: BgTaskEvent.NORMAL,
       result: { success: true },
       start_time: '',
       finish_time: '',
@@ -226,14 +226,14 @@ export class Task {
   /**
    * Get task event
    */
-  getEvent(): TaskEvent {
-    return this.data.event as TaskEvent;
+  getEvent(): BgTaskEvent {
+    return this.data.event as BgTaskEvent;
   }
 
   /**
    * Set task event
    */
-  async setEvent(event: TaskEvent): Promise<number> {
+  async setEvent(event: BgTaskEvent): Promise<number> {
     if (!this.isValidEvent(event)) {
       throw new Error('Task event wrong');
     }
@@ -319,15 +319,15 @@ export class Task {
   /**
    * Check if status is valid
    */
-  private isValidStatus(status: TaskStatus | string): boolean {
-    return Object.values(TaskStatus).includes(status as TaskStatus);
+  private isValidStatus(status: BgTaskStatus | string): boolean {
+    return Object.values(BgTaskStatus).includes(status as BgTaskStatus);
   }
 
   /**
    * Check if event is valid
    */
-  private isValidEvent(event: TaskEvent | number): boolean {
-    return Object.values(TaskEvent).includes(event as TaskEvent);
+  private isValidEvent(event: BgTaskEvent | number): boolean {
+    return Object.values(BgTaskEvent).includes(event as BgTaskEvent);
   }
 
   /**
@@ -479,11 +479,11 @@ export class IVTask extends Task {
     // Create the task data directly instead of using Task.create
     const taskData: TaskData = {
       identifier,
-      task_type: TaskType.IMG_OP,
-      status: TaskStatus.INIT,
+      task_type: BgTaskType.IMG_OP,
+      status: BgTaskStatus.INIT,
       progress: 0,
       params: { img_dir: imgDir },
-      event: TaskEvent.NORMAL,
+      event: BgTaskEvent.NORMAL,
       result: { success: true },
       start_time: '',
       finish_time: '',
@@ -500,7 +500,7 @@ export class IVTask extends Task {
    */
   private async generateThumbnail(imgDir: string): Promise<void> {
     const processed = await generateThumbnailOfDir(imgDir);
-    await this.updateStatus(TaskStatus.FINISHED, 100);
+    await this.updateStatus(BgTaskStatus.FINISHED, 100);
 
     this.data.result = {
       success: true,

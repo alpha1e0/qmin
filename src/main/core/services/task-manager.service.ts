@@ -12,7 +12,7 @@ import {
   BGTaskAlreadyExists,
 } from '../common/exceptions';
 import { currentTimeObjToStr, timeStrToObj } from '../utils/common';
-import { Task, TaskStatus, TaskType, IVTask } from './task.service';
+import { Task, BgTaskStatus, BgTaskType, IVTask } from './task.service';
 import { readJsonFile, writeJsonFile } from '../utils/common';
 
 /**
@@ -37,8 +37,8 @@ export class TaskManagerService {
 
   constructor() {
     this.taskTypeMap = new Map<number, any>([
-      [TaskType.DEFAULT, Task],
-      [TaskType.IMG_OP, IVTask],
+      [BgTaskType.DEFAULT, Task],
+      [BgTaskType.IMG_OP, IVTask],
     ] as any);
   }
 
@@ -106,7 +106,7 @@ export class TaskManagerService {
     const tasks = await Task.getAllTasks();
 
     for (const taskData of tasks) {
-      if (taskData.status === TaskStatus.INIT) {
+      if (taskData.status === BgTaskStatus.INIT) {
         const TaskClass = this.taskTypeMap.get(taskData.task_type);
 
         if (!TaskClass) {
@@ -128,7 +128,7 @@ export class TaskManagerService {
       await task.start();
     } catch (err) {
       logger.error(`Task '${task.identifier}' failed`, err);
-      await task.updateStatus(TaskStatus.FAILED, task.progress);
+      await task.updateStatus(BgTaskStatus.FAILED, task.progress);
     }
   }
 
@@ -145,14 +145,14 @@ export class TaskManagerService {
     for (const taskData of tasks) {
       const task = new Task(taskData);
 
-      if (task.status === TaskStatus.FINISHED) {
+      if (task.status === BgTaskStatus.FINISHED) {
         const finishTime = task.finishTime ? timeStrToObj(task.finishTime) : new Date(0);
         const diff = (now - finishTime.getTime()) / 1000;
 
         if (diff > this.taskFinishTimeout) {
           toRemove.push(task);
         }
-      } else if (task.status === TaskStatus.STARTED) {
+      } else if (task.status === BgTaskStatus.STARTED) {
         const startTime = task.startTime ? timeStrToObj(task.startTime) : new Date(0);
         const diff = (now - startTime.getTime()) / 1000;
 

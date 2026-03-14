@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TaskManagerService } from './task-manager.service';
-import { Task, TaskStatus, TaskType } from './task.service';
+import { Task, BgTaskStatus, BgTaskType } from './task.service';
 
 describe('TaskManagerService', () => {
   let manager: TaskManagerService;
@@ -90,8 +90,8 @@ describe('TaskManagerService', () => {
       const task2 = await Task.get('process-task-2');
 
       // 任务应该被处理（状态变为 STARTED 或 FINISHED）
-      expect(task1?.status).not.toBe(TaskStatus.INIT);
-      expect(task2?.status).not.toBe(TaskStatus.INIT);
+      expect(task1?.status).not.toBe(BgTaskStatus.INIT);
+      expect(task2?.status).not.toBe(BgTaskStatus.INIT);
     });
 
     it('should handle task execution errors', async () => {
@@ -103,7 +103,7 @@ describe('TaskManagerService', () => {
         .spyOn(manager as any, 'runTask')
         .mockImplementation(async (...args: unknown[]) => {
           const task = args[0] as Task;
-          await task.updateStatus(TaskStatus.FAILED, task.progress);
+          await task.updateStatus(BgTaskStatus.FAILED, task.progress);
         });
 
       manager.startWorking();
@@ -111,7 +111,7 @@ describe('TaskManagerService', () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       const updatedTask = await Task.get('failing-task');
-      expect(updatedTask?.status).toBe(TaskStatus.FAILED);
+      expect(updatedTask?.status).toBe(BgTaskStatus.FAILED);
 
       runTaskSpy.mockRestore();
     });
@@ -151,15 +151,15 @@ describe('TaskManagerService', () => {
 
       // 任务应该仍在运行（因为时间未超时）
       const updatedTask = await Task.get('stuck-task');
-      expect(updatedTask?.status).toBe(TaskStatus.STARTED);
+      expect(updatedTask?.status).toBe(BgTaskStatus.STARTED);
     });
   });
 
   describe('Task Type Mapping', () => {
     it('should map task types correctly', async () => {
       // 创建不同类型的任务
-      await Task.create('default-task', {}, TaskType.DEFAULT);
-      await Task.create('img-op-task', {}, TaskType.IMG_OP);
+      await Task.create('default-task', {}, BgTaskType.DEFAULT);
+      await Task.create('img-op-task', {}, BgTaskType.IMG_OP);
 
       // 启动工作器
       manager.startWorking();
@@ -240,7 +240,7 @@ describe('TaskManagerService', () => {
       let processedCount = 0;
       for (let i = 0; i < taskCount; i++) {
         const task = await Task.get(`concurrent-task-${i}`);
-        if (task && task.status !== TaskStatus.INIT) {
+        if (task && task.status !== BgTaskStatus.INIT) {
           processedCount++;
         }
       }
