@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { QwenImgGenerator } from '@/core/services/img-gen/generators/qwen-generator';
+import { QwenImgGenerator } from '@/main/core/services/img-gen/generators/qwen-generator';
 import { LLMConfig } from '../../../models';
 
 // Mock logger

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as os from 'os';
-import { MdEditorService } from '@/core/services/md-editor/md-editor.service';
-import { config } from '@/core/common/context';
+import { MdEditorService } from '@/main/core/services/md-editor/md-editor.service';
+import { config } from '@/main/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

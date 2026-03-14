@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { ENABLE_MIX } from '@/core/common/constants';
+import { ENABLE_MIX } from '@/main/core/common/constants';
 
 /**
  * Encrypt content using AES-256-GCM

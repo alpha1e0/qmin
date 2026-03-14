@@ -1,8 +1,8 @@
 import { ipcMain, webContents } from 'electron';
 import * as path from 'path';
 import { IPC_CHANNELS } from '../channels';
-import { IVViewerService } from '@/core/services/iv-viewer';
-import { createLogger } from '@/core/utils/logger';
+import { IVViewerService } from '@/main/core/services/iv-viewer';
+import { createLogger } from '@/main/core/utils/logger';
 
 const logger = createLogger('IVViewerHandler');
 

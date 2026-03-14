@@ -3,9 +3,9 @@
  * Main service for AI image generation functionality
  */
 
-import { createLogger } from '@/core/utils/logger';
-import { ImgRecorderService } from '@/core/services/img-gen/img-recorder.service';
-import { ImgConfigService } from '@/core/services/img-gen/img-config.service';
+import { createLogger } from '@/main/core/utils/logger';
+import { ImgRecorderService } from '@/main/core/services/img-gen/img-recorder.service';
+import { ImgConfigService } from '@/main/core/services/img-gen/img-config.service';
 import { getImgGenerator } from './generators';
 import {
   ImageGenRequest,
@@ -14,7 +14,7 @@ import {
   HistoryListItem,
   ImageGenRecord,
   LLMConfig,
-} from '@/core/models';
+} from '@/main/core/models';
 
 const logger = createLogger('ImgGenService');
 

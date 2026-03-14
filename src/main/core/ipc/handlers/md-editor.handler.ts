@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron';
 import { IPC_CHANNELS } from '../channels';
-import { MdEditorService } from '@/core/services/md-editor';
-import { createLogger } from '@/core/utils/logger';
+import { MdEditorService } from '@/main/core/services/md-editor';
+import { createLogger } from '@/main/core/utils/logger';
 
 const logger = createLogger('IPC:MdEditor');
 

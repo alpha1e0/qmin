@@ -1,13 +1,13 @@
 import * as fs from 'fs/promises';
-import { wpath } from '@/core/common/context';
+import { wpath } from '@/main/core/common/context';
 import {
   BGTaskNotImplement,
   BGTaskNotFound,
   BGTaskDataFormatError,
   BGTaskAlreadyExists,
-} from '@/core/common/exceptions';
-import { generateThumbnailOfDir } from '@/core/utils/image';
-import { currentTimeObjToStr, timeStrToObj, readJsonFile, writeJsonFile } from '@/core/utils/common';
+} from '@/main/core/common/exceptions';
+import { generateThumbnailOfDir } from '@/main/core/utils/image';
+import { currentTimeObjToStr, timeStrToObj, readJsonFile, writeJsonFile } from '@/main/core/utils/common';
 
 /**
  * Background Task Status Enum

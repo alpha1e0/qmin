@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
-import { RoleplayScenarioService } from '@/core/services/roleplay/roleplay-scenario.service';
+import { RoleplayScenarioService } from '@/main/core/services/roleplay/roleplay-scenario.service';
 import { RoleplayScenario } from '../../common/config';
 
 // Mock wpath

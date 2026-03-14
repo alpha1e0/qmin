@@ -149,7 +149,7 @@ import { ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import type { UploadFile } from 'element-plus';
-import { QwenImageGenParams } from '@/core/models';
+import { QwenImageGenParams } from '@/main/core/models';
 
 // State
 const prompt = ref('');

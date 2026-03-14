@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { TaskManagerService } from '@/core/services/task/task-manager.service';
-import { Task, BgTaskStatus, BgTaskType } from '@/core/services/task/task.service';
+import { TaskManagerService } from '@/main/core/services/task/task-manager.service';
+import { Task, BgTaskStatus, BgTaskType } from '@/main/core/services/task/task.service';
 
 describe('TaskManagerService', () => {
   let manager: TaskManagerService;

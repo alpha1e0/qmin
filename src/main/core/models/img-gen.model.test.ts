@@ -13,7 +13,7 @@ import {
   SUPPORTED_RATIOS,
   SUPPORTED_QUALITIES,
   QWEN_STEPS_RANGE,
-} from '@/core/models/img-gen.model';
+} from '@/main/core/models/img-gen.model';
 
 describe('Image Generation Model', () => {
   describe('LLMConfig interface', () => {

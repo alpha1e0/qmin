@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
+import { BaseImgGenerator } from '@/main/core/services/img-gen/generators/base-generator';
 import { LLMConfig } from '../../../models';
 
 // Mock logger

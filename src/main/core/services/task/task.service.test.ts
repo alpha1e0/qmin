@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as os from 'os';
-import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from '@/core/services/task/task.service';
-import { wpath } from '@/core/common/context';
+import { Task, IVTask, BgTaskStatus, BgTaskType, BgTaskEvent } from '@/main/core/services/task/task.service';
+import { wpath } from '@/main/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

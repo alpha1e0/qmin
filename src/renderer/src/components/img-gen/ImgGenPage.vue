@@ -145,7 +145,7 @@ import { ref, onMounted } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import type { UploadFile } from 'element-plus';
-import { ImageGenParams } from '@/core/models';
+import { ImageGenParams } from '@/main/core/models';
 
 // State
 const configs = ref<string[]>([]);

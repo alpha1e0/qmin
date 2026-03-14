@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { GeminiImgGenerator } from '@/core/services/img-gen/generators/gemini-generator';
+import { GeminiImgGenerator } from '@/main/core/services/img-gen/generators/gemini-generator';
 import { LLMConfig } from '../../../models';
 
 // Mock logger

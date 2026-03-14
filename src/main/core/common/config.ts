@@ -5,7 +5,7 @@
  * Database models are defined in src/main/core/models/
  */
 
-import { IVOperation } from '@/core/models';
+import { IVOperation } from '@/main/core/models';
 
 // ============================================================================
 // Task Models

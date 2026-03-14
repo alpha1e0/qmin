@@ -1,9 +1,9 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { wpath } from '@/core/common/context';
-import { createLogger } from '@/core/utils/logger';
-import { RoleplayLLMConfig } from '@/core/common/config';
+import { wpath } from '@/main/core/common/context';
+import { createLogger } from '@/main/core/utils/logger';
+import { RoleplayLLMConfig } from '@/main/core/common/config';
 
 const logger = createLogger('RoleplayConfigService');
 
@@ -105,7 +105,7 @@ export class RoleplayConfigService {
    * @returns Default LLM config
    */
   async getDefaultConfig(): Promise<RoleplayLLMConfig> {
-    const { config } = await import('@/core/common/context');
+    const { config } = await import('@/main/core/common/context');
     const defaultConfigName = config.roleplay.defaultLlmConfig;
 
     try {

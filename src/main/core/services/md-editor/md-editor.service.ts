@@ -1,16 +1,16 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
-import { wpath, config } from '@/core/common/context';
-import { createLogger } from '@/core/utils/logger';
+import { wpath, config } from '@/main/core/common/context';
+import { createLogger } from '@/main/core/utils/logger';
 
 const logger = createLogger('MdEditorService');
-import { MdEditorDBOpError, MdEditorOpNotAllowed, MdEditorImgOpError } from '@/core/common/exceptions';
-import { IMG_SAVE_TO_DB, MIME_MAP } from '@/core/common/constants';
-import { DBManager } from '@/core/database/db-manager';
-import { currentTimeObjToStr, getFileSizeMB } from '@/core/utils/common';
-import { mix, unmix } from '@/core/utils/crypto';
-import { isImage } from '@/core/utils/path';
+import { MdEditorDBOpError, MdEditorOpNotAllowed, MdEditorImgOpError } from '@/main/core/common/exceptions';
+import { IMG_SAVE_TO_DB, MIME_MAP } from '@/main/core/common/constants';
+import { DBManager } from '@/main/core/database/db-manager';
+import { currentTimeObjToStr, getFileSizeMB } from '@/main/core/utils/common';
+import { mix, unmix } from '@/main/core/utils/crypto';
+import { isImage } from '@/main/core/utils/path';
 import {
   DocCategory,
   Doc,
@@ -20,8 +20,8 @@ import {
   DocUpdate,
   CategoryCreate,
   CategoryUpdate,
-} from '@/core/models';
-import { encrypt, decrypt, md5sum } from '@/core/utils/crypto';
+} from '@/main/core/models';
+import { encrypt, decrypt, md5sum } from '@/main/core/utils/crypto';
 
 /**
  * Markdown Editor Service

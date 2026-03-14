@@ -19,13 +19,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/main/*"],
-      "@/core/*": ["src/main/core/*"],
-      "@/core/common/*": ["src/main/core/common/*"],
-      "@/core/models/*": ["src/main/core/models/*"],
-      "@/core/services/*": ["src/main/core/services/*"],
-      "@/core/utils/*": ["src/main/core/utils/*"],
-      "@/core/database/*": ["src/main/core/database/*"],
-      "@/core/ipc/*": ["src/main/core/ipc/*"],
+      "@/main/core/*": ["src/main/core/*"],
+      "@/main/core/common/*": ["src/main/core/common/*"],
+      "@/main/core/models/*": ["src/main/core/models/*"],
+      "@/main/core/services/*": ["src/main/core/services/*"],
+      "@/main/core/utils/*": ["src/main/core/utils/*"],
+      "@/main/core/database/*": ["src/main/core/database/*"],
+      "@/main/core/ipc/*": ["src/main/core/ipc/*"],
       "@/preload/*": ["src/preload/*"]
     }
   },

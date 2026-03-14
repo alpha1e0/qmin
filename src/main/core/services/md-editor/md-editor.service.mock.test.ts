@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as os from 'os';
-import { MdEditorService } from '@/core/services/md-editor/md-editor.service';
-import { DBManager } from '@/core/database/db-manager';
-import { config } from '@/core/common/context';
+import { MdEditorService } from '@/main/core/services/md-editor/md-editor.service';
+import { DBManager } from '@/main/core/database/db-manager';
+import { config } from '@/main/core/common/context';
 
 // Mock the config
 vi.mock('../common/context', () => ({

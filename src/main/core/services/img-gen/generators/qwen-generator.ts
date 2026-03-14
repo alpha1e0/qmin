@@ -4,10 +4,10 @@
  */
 
 import axios, { AxiosInstance } from 'axios';
-import { createLogger } from '@/core/utils/logger';
-import { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
-import { LLMConfig, ImageGenParams, QwenImageGenParams } from '@/core/models';
-import { createDataUrl } from '@/core/utils/image';
+import { createLogger } from '@/main/core/utils/logger';
+import { BaseImgGenerator } from '@/main/core/services/img-gen/generators/base-generator';
+import { LLMConfig, ImageGenParams, QwenImageGenParams } from '@/main/core/models';
+import { createDataUrl } from '@/main/core/utils/image';
 
 const logger = createLogger('QwenImgGenerator');
 

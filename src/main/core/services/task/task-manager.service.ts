@@ -1,8 +1,8 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { wpath } from '@/core/common/context';
-import { createLogger } from '@/core/utils/logger';
+import { wpath } from '@/main/core/common/context';
+import { createLogger } from '@/main/core/utils/logger';
 
 const logger = createLogger('TaskManagerService');
 import {
@@ -10,10 +10,10 @@ import {
   BGTaskNotFound,
   BGTaskDataFormatError,
   BGTaskAlreadyExists,
-} from '@/core/common/exceptions';
-import { currentTimeObjToStr, timeStrToObj } from '@/core/utils/common';
-import { Task, BgTaskStatus, BgTaskType, IVTask } from '@/core/services/task/task.service';
-import { readJsonFile, writeJsonFile } from '@/core/utils/common';
+} from '@/main/core/common/exceptions';
+import { currentTimeObjToStr, timeStrToObj } from '@/main/core/utils/common';
+import { Task, BgTaskStatus, BgTaskType, IVTask } from '@/main/core/services/task/task.service';
+import { readJsonFile, writeJsonFile } from '@/main/core/utils/common';
 
 /**
  * Task database structure

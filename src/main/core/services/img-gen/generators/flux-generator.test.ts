@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { FluxImgGenerator } from '@/core/services/img-gen/generators/flux-generator';
+import { FluxImgGenerator } from '@/main/core/services/img-gen/generators/flux-generator';
 import { LLMConfig } from '../../../models';
 
 // Mock logger

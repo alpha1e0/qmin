@@ -9,9 +9,9 @@ import * as http from 'http';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import sharp from 'sharp';
-import { IV_CACHE_DIR } from '@/core/common/constants';
-import { createLogger } from '@/core/utils/logger';
-import { ensureDirectory, getFileExtension, getFileName, joinPath } from '@/core/utils/path';
+import { IV_CACHE_DIR } from '@/main/core/common/constants';
+import { createLogger } from '@/main/core/utils/logger';
+import { ensureDirectory, getFileExtension, getFileName, joinPath } from '@/main/core/utils/path';
 
 const logger = createLogger('ImageUtils');
 

@@ -3,7 +3,7 @@ import {
   generateThumbnailOfDir,
   getImageSize,
   getImageMetadata,
-} from '@/core/utils/image';
+} from '@/main/core/utils/image';
 
 /**
  * Image Parser Service - wraps image utility functions

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import * as os from 'os';
-import { IVViewerService } from '@/core/services/iv-viewer/iv-viewer.service';
-import { config } from '@/core/common/context';
+import { IVViewerService } from '@/main/core/services/iv-viewer/iv-viewer.service';
+import { config } from '@/main/core/common/context';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 

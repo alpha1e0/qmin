@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
-import { RoleplayHistoryService } from '@/core/services/roleplay/roleplay-history.service';
+import { RoleplayHistoryService } from '@/main/core/services/roleplay/roleplay-history.service';
 import { RoleplayChatHistory } from '../../common/config';
 
 // Mock wpath

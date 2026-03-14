@@ -3,12 +3,12 @@
  * Factory function to create appropriate image generator based on LLM config
  */
 
-import { createLogger } from '@/core/utils/logger';
-import { LLMConfig } from '@/core/models';
-import { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
-import { GeminiImgGenerator } from '@/core/services/img-gen/generators/gemini-generator';
-import { FluxImgGenerator } from '@/core/services/img-gen/generators/flux-generator';
-import { QwenImgGenerator } from '@/core/services/img-gen/generators/qwen-generator';
+import { createLogger } from '@/main/core/utils/logger';
+import { LLMConfig } from '@/main/core/models';
+import { BaseImgGenerator } from '@/main/core/services/img-gen/generators/base-generator';
+import { GeminiImgGenerator } from '@/main/core/services/img-gen/generators/gemini-generator';
+import { FluxImgGenerator } from '@/main/core/services/img-gen/generators/flux-generator';
+import { QwenImgGenerator } from '@/main/core/services/img-gen/generators/qwen-generator';
 
 const logger = createLogger('ImgGeneratorFactory');
 
@@ -54,7 +54,7 @@ export function getImgGenerator(
 }
 
 // Export all generators
-export { BaseImgGenerator } from '@/core/services/img-gen/generators/base-generator';
-export { GeminiImgGenerator } from '@/core/services/img-gen/generators/gemini-generator';
-export { FluxImgGenerator } from '@/core/services/img-gen/generators/flux-generator';
-export { QwenImgGenerator } from '@/core/services/img-gen/generators/qwen-generator';
+export { BaseImgGenerator } from '@/main/core/services/img-gen/generators/base-generator';
+export { GeminiImgGenerator } from '@/main/core/services/img-gen/generators/gemini-generator';
+export { FluxImgGenerator } from '@/main/core/services/img-gen/generators/flux-generator';
+export { QwenImgGenerator } from '@/main/core/services/img-gen/generators/qwen-generator';

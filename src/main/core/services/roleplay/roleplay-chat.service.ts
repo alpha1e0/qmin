@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { createLogger } from '@/core/utils/logger';
-import { RoleplayLLMConfig, RoleplayScenario, RoleplayMessage } from '@/core/common/config';
+import { createLogger } from '@/main/core/utils/logger';
+import { RoleplayLLMConfig, RoleplayScenario, RoleplayMessage } from '@/main/core/common/config';
 
 const logger = createLogger('RoleplayChatService');
 

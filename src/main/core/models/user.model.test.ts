@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { User, UserCreate, UserUpdate } from '@/core/models/user.model';
+import { User, UserCreate, UserUpdate } from '@/main/core/models/user.model';
 
 describe('User Model', () => {
   describe('User interface', () => {

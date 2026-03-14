@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as os from 'os';
-import { MIME_MAP } from '@/core/common/constants';
+import { MIME_MAP } from '@/main/core/common/constants';
 
 /**
  * Get the current working directory for inner resources

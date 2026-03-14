@@ -15,7 +15,13 @@
     "declaration": true,
     "sourceMap": true,
     "types": ["node", "electron"],
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*",
+      ]
+    },
   },
   "include": ["src/core/**/*"],
   "exclude": ["node_modules", "dist", "src/renderer"],

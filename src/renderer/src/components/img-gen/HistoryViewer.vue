@@ -91,7 +91,7 @@
 import { ref, onMounted } from 'vue';
 import { Refresh } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { HistoryListItem, ImageGenRecord } from '@/core/models';
+import { HistoryListItem, ImageGenRecord } from '@/main/core/models';
 
 // State
 const historyList = ref<HistoryListItem[]>([]);

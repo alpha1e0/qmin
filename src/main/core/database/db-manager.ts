@@ -2,10 +2,10 @@ import Database from 'better-sqlite3';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { wpath } from '@/core/common/context';
-import { BaseDBError } from '@/core/common/exceptions';
-import { mix } from '@/core/utils/crypto';
-import { currentTimeObjToStr } from '@/core/utils/common';
+import { wpath } from '@/main/core/common/context';
+import { BaseDBError } from '@/main/core/common/exceptions';
+import { mix } from '@/main/core/utils/crypto';
+import { currentTimeObjToStr } from '@/main/core/utils/common';
 
 /**
  * Database Manager using better-sqlite3
