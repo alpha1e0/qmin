@@ -65,8 +65,8 @@
 
   "encryption": {
     "description": "加密测试配置",
-    "enKey": "12345678901234567890123456789012",
-    "hkeyHash": "5d41402abc4b2a76b9719d911017c592"
+    "enKey": "MTIzNDU2MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA=",
+    "hkeyHash": "e10adc3949ba59abbe56e057f20f883e"
   },
 
   "testSettings": {

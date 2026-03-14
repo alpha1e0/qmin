@@ -1,15 +1,26 @@
-# Qmin 单元测试配置说明
+# Qmin 测试配置说明
 
-本目录包含 Qmin 项目的单元测试配置文件。
+本目录包含 Qmin 项目的测试配置文件。
+
+## 目录结构
+
+```
+testing/
+├── config/                    # 测试配置目录
+│   ├── README.md              # 本文档
+│   ├── test-config.json       # 测试配置（JSON格式）
+│   ├── test-config.schema.json # 配置Schema验证
+│   └── test-config.ts         # 配置加载器（TypeScript）
+├── fixtures/                  # 测试夹具（预留）
+└── mocks/                     # Mock 数据（预留）
+```
 
 ## 配置文件说明
 
-### 1. `.env.test.example`
-环境变量配置示例文件。复制并重命名为 `.env.test`，填入实际的 API 密钥和配置。
+### 1. `.env.test`
+环境变量配置文件（项目根目录）。包含敏感的 API 密钥等配置。
 
-```bash
-cp .env.test.example .env.test
-```
+**注意**: 此文件已在 `.gitignore` 中，不会被提交到 Git
 
 ### 2. `test-config.json`
 JSON 格式的测试配置文件。包含所有测试所需的配置项。
@@ -19,6 +30,9 @@ JSON 格式的测试配置文件。包含所有测试所需的配置项。
 
 ### 3. `test-config.schema.json`
 配置文件的 JSON Schema 定义，用于验证配置格式。
+
+### 4. `test-config.ts`
+TypeScript 配置加载器和类型定义。
 
 ## 配置项详解
 
@@ -108,3 +122,18 @@ A: 在 `test-config.json` 中增加 `testSettings.timeout` 的值。
 - `src/main/core/vitest.setup.ts` - Vitest 测试环境设置
 - `vitest.config.ts` - Vitest 配置文件
 - `package.json` - 测试脚本定义
+- `.gitignore` - Git 忽略规则（包含 test-config.local.json）
+
+## 迁移说明
+
+本目录原为 `__tests__/`，在重构后迁移到 `testing/config/`：
+
+**原因**:
+- `__tests__` 命名容易误导为会被自动加载的测试文件目录
+- 实际内容为测试配置资源，非测试代码
+- `testing/config` 更清晰地表达其用途，且便于扩展其他测试资源
+
+**影响**:
+- ✅ 功能完全相同，仅改变目录位置
+- ✅ 已更新 `.gitignore` 中的路径
+- ✅ 无代码文件引用此目录，无需修改源代码

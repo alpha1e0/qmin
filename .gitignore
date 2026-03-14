@@ -70,6 +70,7 @@ Desktop.ini
 .env
 .env.local
 .env.development.local
+.env.test
 .env.test.local
 .env.production.local
 .env.*.local
@@ -118,5 +119,5 @@ example/
 # Test configuration (sensitive)
 # ================================
 .env.test
-__tests__/test-config.local.json
-__tests__/.env.test.local
+testing/config/test-config.local.json
+testing/config/.env.test.local
