@@ -55,7 +55,7 @@ describe('BaseImgGenerator', () => {
 
       // Mock convertImageToJpeg
       const mockJpegData = Buffer.from('jpeg data');
-      vi.doMock('../../utils/image-helper', () => ({
+      vi.doMock('../../utils/image', () => ({
         convertImageToJpeg: vi.fn().mockResolvedValue(mockJpegData),
       }));
 

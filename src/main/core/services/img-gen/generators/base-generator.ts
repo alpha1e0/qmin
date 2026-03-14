@@ -41,7 +41,7 @@ export abstract class BaseImgGenerator {
    * @returns Processed image bytes
    */
   async prepareImg(imgBytes: Buffer, fileName: string): Promise<Buffer> {
-    const { convertImageToJpeg } = await import('../../utils/image-helper');
+    const { convertImageToJpeg } = await import('../../utils/image');
     const newImgBytes = await convertImageToJpeg(imgBytes);
     // Recording will be done by the caller
     return newImgBytes;

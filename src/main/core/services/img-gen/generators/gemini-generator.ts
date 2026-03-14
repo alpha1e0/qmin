@@ -57,7 +57,7 @@ export class GeminiImgGenerator extends BaseImgGenerator {
       ];
 
       // Add reference images
-      const { createDataUrl } = await import('../../utils/image-helper');
+      const { createDataUrl } = await import('../../utils/image');
       for (const imgContent of refImages) {
         const imgUrl = createDataUrl(imgContent);
         query.push({
