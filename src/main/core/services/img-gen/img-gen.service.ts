@@ -6,7 +6,7 @@
 import { createLogger } from '../../utils/logger';
 import { ImgRecorderService } from './img-recorder.service';
 import { ImgConfigService } from './img-config.service';
-import { getImgGenerator } from './img-generators';
+import { getImgGenerator } from './generators';
 import {
   ImageGenRequest,
   QwenImageGenRequest,

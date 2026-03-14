@@ -45,7 +45,7 @@ vi.mock('./img-config.service', () => ({
 }));
 
 // Mock getImgGenerator
-vi.mock('./img-generators', () => ({
+vi.mock('./generators', () => ({
   getImgGenerator: vi.fn().mockImplementation(() => ({
     generateImg: vi.fn().mockResolvedValue([
       true,
@@ -81,7 +81,7 @@ describe('ImgGenService', () => {
 
     it('should handle generation failure', async () => {
       // Mock generator to return failure
-      const { getImgGenerator } = await import('./img-generators');
+      const { getImgGenerator } = await import('./generators');
       (getImgGenerator as any).mockImplementation(() => ({
         generateImg: vi.fn().mockResolvedValue([false, 'Generation failed']),
         prepareImg: vi.fn().mockResolvedValue(Buffer.from('test')),
@@ -153,7 +153,7 @@ describe('ImgGenService', () => {
 
     it('should handle Qwen generation failure', async () => {
       // Mock generator to return failure
-      const { getImgGenerator } = await import('./img-generators');
+      const { getImgGenerator } = await import('./generators');
       (getImgGenerator as any).mockImplementation(() => ({
         generateImg: vi.fn().mockResolvedValue([false, 'Qwen generation failed']),
         prepareImg: vi.fn().mockResolvedValue(Buffer.from('test')),
