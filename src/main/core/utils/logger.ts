@@ -1,6 +1,16 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { wpath } from '../common/context';
+
+// Lazy import to avoid circular dependency with context.ts
+let _wpath: typeof import('../common/context').wpath | null = null;
+
+function getWpath() {
+  if (!_wpath) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    _wpath = require('../common/context').wpath;
+  }
+  return _wpath;
+}
 
 /**
  * Log level enum
@@ -182,7 +192,7 @@ export class Logger {
     try {
       const logLine = JSON.stringify(entry) + '\n';
       const logFileName = this.getLogFileName();
-      const logFile = path.join(wpath.logDirectory, logFileName);
+      const logFile = path.join(getWpath().logDirectory, logFileName);
 
       // Check if rotation is needed
       await this.rotateIfNeeded(logFile, logLine.length);
@@ -311,7 +321,7 @@ export class Logger {
    */
   private async cleanOldLogs(): Promise<void> {
     try {
-      const logDir = wpath.logDirectory;
+      const logDir = getWpath().logDirectory;
       const files = await fs.readdir(logDir);
       const now = Date.now();
       const retentionMs = this.config.retentionDays * 24 * 60 * 60 * 1000;
